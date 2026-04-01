@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>PokeGrade</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+:root {
+  --yellow: #FFD000; --red: #FF3B30; --green: #34C759;
+  --orange: #FF9500; --bg: #0C0C0E; --card: #1C1C1E;
+  --card2: #2C2C2E; --border: #38383A; --text: #FFFFFF; --muted: #8E8E93;
+  --font-display: 'Archivo Black', sans-serif; --font-body: 'Archivo', sans-serif;
+}
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; max-width: 480px; margin: 0 auto; }
+.header { padding: 56px 24px 24px; display: flex; align-items: center; justify-content: space-between; }
+.logo { font-family: var(--font-display); font-size: 28px; letter-spacing: -0.5px; }
+.logo span { color: var(--yellow); }
+.pill { background: var(--yellow); color: #000; font-family: var(--font-display); font-size: 10px; letter-spacing: 1px; padding: 5px 10px; border-radius: 20px; }
+.screen { display: none; padding: 0 20px 40px; animation: fadeIn 0.3s ease; }
+.screen.active { display: block; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.hero-text { font-family: var(--font-display); font-size: 38px; line-height: 1.1; letter-spacing: -1px; margin-bottom: 12px; }
+.hero-text span { color: var(--yellow); }
+.hero-sub { color: var(--muted); font-size: 15px; font-weight: 300; line-height: 1.5; margin-bottom: 36px; }
+.btn-primary { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 18px; background: var(--yellow); color: #000; font-family: var(--font-display); font-size: 16px; border: none; border-radius: 16px; cursor: pointer; margin-bottom: 12px; transition: transform 0.15s, opacity 0.15s; }
+.btn-primary:active { transform: scale(0.97); opacity: 0.9; }
+.btn-secondary { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 18px; background: var(--card); color: var(--text); font-family: var(--font-display); font-size: 16px; border: 1.5px solid var(--border); border-radius: 16px; cursor: pointer; margin-bottom: 12px; transition: transform 0.15s; }
+.btn-secondary:active { transform: scale(0.97); }
+.btn-ghost { display: flex; align-items: center; justify-content: center; width: 100%; padding: 14px; background: transparent; color: var(--muted); font-family: var(--font-body); font-size: 14px; border: none; cursor: pointer; }
+.features { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.feature-chip { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+.feature-chip .icon { font-size: 22px; margin-bottom: 6px; }
+.feature-chip .label { font-family: var(--font-display); font-size: 13px; line-height: 1.2; }
+.feature-chip .desc { color: var(--muted); font-size: 11px; margin-top: 3px; font-weight: 300; }
+#cameraOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 999; flex-direction: column; }
+#cameraOverlay.open { display: flex; }
+#videoFeed { flex: 1; width: 100%; object-fit: cover; }
+.cam-guide { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%); width: 65%; aspect-ratio: 2.5/3.5; border: 2px solid rgba(255,208,0,0.7); border-radius: 12px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.45); }
+.cam-guide::before, .cam-guide::after { content: ''; position: absolute; width: 20px; height: 20px; border-color: var(--yellow); border-style: solid; }
+.cam-guide::before { top:-2px; left:-2px; border-width:3px 0 0 3px; border-radius:4px 0 0 0; }
+.cam-guide::after  { bottom:-2px; right:-2px; border-width:0 3px 3px 0; border-radius:0 0 4px 0; }
+.cam-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%, calc(-60% - 120px)); color: rgba(255,255,255,0.8); font-size: 13px; letter-spacing: 1px; text-align: center; font-family: var(--font-display); }
+.cam-controls { padding: 24px 24px 48px; display: flex; align-items: center; justify-content: space-between; background: linear-gradient(transparent, #000); }
+.shutter { width: 72px; height: 72px; border-radius: 50%; background: #fff; border: 4px solid rgba(255,255,255,0.3); cursor: pointer; transition: transform 0.1s; flex-shrink: 0; }
+.shutter:active { transform: scale(0.92); }
+.cam-cancel { color: #fff; background: transparent; border: none; font-family: var(--font-body); font-size: 16px; cursor: pointer; padding: 12px; opacity: 0.8; }
+.cam-tip { color: rgba(255,255,255,0.5); font-size: 12px; text-align: center; width: 72px; }
+#snapCanvas { display: none; }
+.preview-img-wrap { position: relative; background: var(--card); border-radius: 20px; overflow: hidden; margin-bottom: 20px; aspect-ratio: 3/4; }
+.preview-img-wrap img { width: 100%; height: 100%; object-fit: contain; }
+.retake-btn { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); color: #fff; border: none; border-radius: 20px; padding: 6px 14px; font-size: 13px; cursor: pointer; backdrop-filter: blur(8px); }
+.input-group { margin-bottom: 16px; }
+.input-label { font-size: 12px; color: var(--muted); letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 500; text-transform: uppercase; }
+.text-input { width: 100%; background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 16px; color: var(--text); font-family: var(--font-body); font-size: 16px; outline: none; transition: border-color 0.2s; }
+.text-input:focus { border-color: var(--yellow); }
+.text-input::placeholder { color: var(--muted); }
+.error-msg { background: rgba(255,59,48,0.12); border: 1px solid rgba(255,59,48,0.3); border-radius: 12px; padding: 14px 16px; color: #FF6B6B; font-size: 13px; margin-bottom: 16px; display: none; line-height: 1.5; }
+.loading-wrap { padding: 60px 0; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.pokeball { width: 72px; height: 72px; border-radius: 50%; border: 4px solid var(--border); position: relative; animation: spin 1s linear infinite; overflow: hidden; }
+.pokeball::before { content: ''; position: absolute; top:0; left:0; right:0; height:50%; background: var(--red); }
+.pokeball::after { content: ''; position: absolute; top:50%; left:50%; transform: translate(-50%,-50%); width:16px; height:16px; border-radius: 50%; background: var(--bg); border: 3px solid var(--border); z-index:1; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.load-title { font-family: var(--font-display); font-size: 20px; text-align: center; }
+.load-steps { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.load-step { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--card); border-radius: 12px; font-size: 14px; color: var(--muted); transition: all 0.4s; border: 1px solid transparent; }
+.load-step.done { color: var(--text); }
+.load-step.done .step-dot { background: var(--green); }
+.load-step.active { color: var(--text); border-color: var(--yellow); }
+.load-step.active .step-dot { background: var(--yellow); animation: pulse 0.8s infinite; }
+.step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+.grade-hero { background: var(--card); border-radius: 24px; padding: 28px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid var(--yellow); }
+.grade-card-name { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.grade-label-text { font-family: var(--font-display); font-size: 22px; line-height: 1.1; margin-bottom: 4px; }
+.grade-sublabel { font-size: 13px; color: var(--muted); font-weight: 300; }
+.grade-score-wrap { text-align: right; }
+.grade-score { font-family: var(--font-display); font-size: 64px; line-height: 1; letter-spacing: -2px; }
+.grade-score-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.section-title { font-family: var(--font-display); font-size: 13px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin: 24px 0 12px; }
+.score-row { background: var(--card); border-radius: 16px; padding: 16px 18px; margin-bottom: 10px; animation: fadeIn 0.4s ease both; }
+.score-row-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.score-row-left { display: flex; align-items: center; gap: 10px; }
+.score-icon { font-size: 20px; }
+.score-cat-name { font-family: var(--font-display); font-size: 15px; }
+.score-descriptor { font-size: 12px; color: var(--muted); margin-top: 1px; font-weight: 300; }
+.score-num-badge { font-family: var(--font-display); font-size: 20px; min-width: 40px; text-align: right; }
+.bar-track { height: 6px; background: var(--card2); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); }
+.analysis-card { background: var(--card); border-radius: 16px; padding: 20px; margin-bottom: 10px; }
+.analysis-cat { font-family: var(--font-display); font-size: 13px; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.analysis-text { font-size: 14px; line-height: 1.65; color: #C7C7CC; font-weight: 300; }
+.divider { height: 1px; background: var(--border); margin: 24px 0; }
+input[type="file"] { display: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo"><span>Poke</span>Grade</div>
+  <div class="pill">AI GRADER</div>
+</div>
+
+<div class="screen active" id="screen-upload">
+  <div class="hero-text">Grade your<br><span>Pokémon</span><br>cards.</div>
+  <div class="hero-sub">AI-powered grading using professional TCG standards. Get a PSA-style score instantly.</div>
+  <button class="btn-primary" onclick="openCamera()"><span style="font-size:20px">📷</span> Take a Photo</button>
+  <button class="btn-secondary" onclick="document.getElementById('fileInput').click()"><span style="font-size:20px">🖼️</span> Upload from Library</button>
+  <input type="file" id="fileInput" accept="image/*" onchange="handleFile(this.files[0])">
+  <div class="features">
+    <div class="feature-chip"><div class="icon">🎯</div><div class="label">Centering Analysis</div><div class="desc">Border ratios measured</div></div>
+    <div class="feature-chip"><div class="icon">📐</div><div class="label">Corner & Edge</div><div class="desc">Wear detection</div></div>
+    <div class="feature-chip"><div class="icon">🔍</div><div class="label">Surface Scan</div><div class="desc">Scratches & defects</div></div>
+    <div class="feature-chip"><div class="icon">⭐</div><div class="label">PSA-Style Score</div><div class="desc">1–10 final grade</div></div>
+  </div>
+</div>
+
+<div class="screen" id="screen-preview">
+  <div class="preview-img-wrap">
+    <img id="previewImg" src="" alt="Card">
+    <button class="retake-btn" onclick="goBack()">✕ Retake</button>
+  </div>
+  <div class="input-group">
+    <div class="input-label">Card Name (optional)</div>
+    <input type="text" class="text-input" id="cardName" placeholder="e.g. Charizard Base Set 1st Edition">
+  </div>
+  <div class="error-msg" id="errorMsg"></div>
+  <button class="btn-primary" onclick="analyze()"><span style="font-size:18px">⚡</span> Analyze Card</button>
+  <button class="btn-ghost" onclick="goBack()">← Choose Different Photo</button>
+</div>
+
+<div class="screen" id="screen-loading">
+  <div class="loading-wrap">
+    <div class="pokeball"></div>
+    <div><div class="load-title">Grading your card...</div></div>
+    <div class="load-steps">
+      <div class="load-step" id="step1"><div class="step-dot"></div> Analyzing centering ratios</div>
+      <div class="load-step" id="step2"><div class="step-dot"></div> Inspecting corners & edges</div>
+      <div class="load-step" id="step3"><div class="step-dot"></div> Scanning surface condition</div>
+      <div class="load-step" id="step4"><div class="step-dot"></div> Computing final grade</div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="screen-results">
+  <div class="grade-hero" id="gradeHero">
+    <div class="grade-info">
+      <div class="grade-card-name" id="gradeCardName">POKÉMON CARD</div>
+      <div class="grade-label-text" id="gradeLabelText">—</div>
+      <div class="grade-sublabel">PSA-Style Grade</div>
+    </div>
+    <div class="grade-score-wrap">
+      <div class="grade-score" id="gradeScore">—</div>
+      <div class="grade-score-sub">/ 10</div>
+    </div>
+  </div>
+  <div class="section-title">Category Scores</div>
+  <div id="scoreRows"></div>
+  <div class="section-title">Detailed Analysis</div>
+  <div id="analysisCards"></div>
+  <div class="divider"></div>
+  <button class="btn-primary" onclick="reset()" style="background:var(--card);border:1.5px solid var(--border);color:var(--text);">Grade Another Card</button>
+</div>
+
+<div id="cameraOverlay">
+  <video id="videoFeed" autoplay playsinline muted></video>
+  <div class="cam-label">FIT CARD IN FRAME</div>
+  <div class="cam-guide"></div>
+  <canvas id="snapCanvas"></canvas>
+  <div class="cam-controls">
+    <button class="cam-cancel" onclick="closeCamera()">Cancel</button>
+    <button class="shutter" onclick="capturePhoto()"></button>
+    <div class="cam-tip">Tap to capture</div>
+  </div>
+</div>
+
+<script>
+const WORKER_URL = 'https://pokegrader-api.jaydengoosen1.workers.dev';
+let imgBase64 = null, mediaType = 'image/jpeg', camStream = null, stepTimer = null;
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function goBack() {
+  imgBase64 = null;
+  document.getElementById('cardName').value = '';
+  document.getElementById('errorMsg').style.display = 'none';
+  document.getElementById('fileInput').value = '';
+  showScreen('upload');
+}
+function reset() { goBack(); }
+
+function handleFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  mediaType = file.type;
+  const reader = new FileReader();
+  reader.onload = e => {
+    imgBase64 = e.target.result.split(',')[1];
+    document.getElementById('previewImg').src = e.target.result;
+    showScreen('preview');
+  };
+  reader.readAsDataURL(file);
+}
+
+async function openCamera() {
+  document.getElementById('cameraOverlay').classList.add('open');
+  try {
+    camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1920 } } });
+    document.getElementById('videoFeed').srcObject = camStream;
+  } catch(e) {
+    document.getElementById('cameraOverlay').classList.remove('open');
+    alert('Camera access denied. Use "Upload from Library" instead.');
+  }
+}
+function closeCamera() {
+  if (camStream) camStream.getTracks().forEach(t => t.stop());
+  camStream = null;
+  document.getElementById('cameraOverlay').classList.remove('open');
+}
+function capturePhoto() {
+  const video = document.getElementById('videoFeed');
+  const canvas = document.getElementById('snapCanvas');
+  canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  const dataURL = canvas.toDataURL('image/jpeg', 0.92);
+  imgBase64 = dataURL.split(',')[1]; mediaType = 'image/jpeg';
+  document.getElementById('previewImg').src = dataURL;
+  closeCamera(); showScreen('preview');
+}
+
+function startSteps() {
+  const steps = ['step1','step2','step3','step4'];
+  steps.forEach(s => { document.getElementById(s).classList.remove('active','done'); });
+  document.getElementById(steps[0]).classList.add('active');
+  let i = 0;
+  stepTimer = setInterval(() => {
+    document.getElementById(steps[i]).classList.remove('active');
+    document.getElementById(steps[i]).classList.add('done');
+    i++;
+    if (i < steps.length) document.getElementById(steps[i]).classList.add('active');
+    else clearInterval(stepTimer);
+  }, 1600);
+}
+
+function scoreColor(s) {
+  if (s >= 9) return '#34C759';
+  if (s >= 7) return '#FFD000';
+  if (s >= 5) return '#FF9500';
+  return '#FF3B30';
+}
+function gradeLabel(s) {
+  if (s >= 10) return 'Gem Mint';
+  if (s >= 9) return 'Mint';
+  if (s >= 8) return 'Near Mint–Mint';
+  if (s >= 7) return 'Near Mint';
+  if (s >= 6) return 'Excellent–Mint';
+  if (s >= 5) return 'Excellent';
+  if (s >= 4) return 'Very Good';
+  if (s >= 2) return 'Good';
+  return 'Poor';
+}
+
+async function analyze() {
+  if (!imgBase64) return;
+  document.getElementById('errorMsg').style.display = 'none';
+  showScreen('loading'); startSteps();
+  const cardName = document.getElementById('cardName').value.trim();
+  const system = `You are a professional Pokémon TCG card grading expert with PSA, BGS, and CGC-level knowledge. Analyze the card image and return ONLY a valid JSON object — no markdown, no code fences, no explanation.
+Format:
+{"centering":{"score":<1.0-10.0>,"descriptor":"<short phrase>","notes":"<2-3 sentences>"},"corners":{"score":<1.0-10.0>,"descriptor":"<short phrase>","notes":"<2-3 sentences>"},"surface":{"score":<1.0-10.0>,"descriptor":"<short phrase>","notes":"<2-3 sentences>"},"edges":{"score":<1.0-10.0>,"descriptor":"<short phrase>","notes":"<2-3 sentences>"},"overall":{"score":<1.0-10.0>,"label":"<grade name>","summary":"<3-4 sentences>"}}
+Scale: 10=Gem Mint,9-9.5=Mint,8-8.9=NM-M,7-7.9=NM,6-6.9=EX-NM,5-5.9=EX,3-4.9=VG,1-2.9=Poor. Be honest and precise.`;
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1000,
+        system,
+        messages: [{ role: 'user', content: [
+          { type: 'image', source: { type: 'base64', media_type: mediaType, data: imgBase64 } },
+          { type: 'text', text: `Grade this Pokémon card${cardName ? ' ("'+cardName+'")' : ''}. Return ONLY the JSON.` }
+        ]}]
+      })
+    });
+    clearInterval(stepTimer);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    const raw = (data.content||[]).map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
+    renderResults(JSON.parse(raw), cardName);
+    showScreen('results');
+  } catch(err) {
+    clearInterval(stepTimer);
+    showScreen('preview');
+    const eb = document.getElementById('errorMsg');
+    eb.style.display = 'block';
+    eb.textContent = '⚠ ' + (err.message || 'Something went wrong. Please try again.');
+  }
+}
+
+function renderResults(r, cardName) {
+  const overall = r.overall.score, color = scoreColor(overall);
+  document.getElementById('gradeCardName').textContent = (cardName||'Pokémon Card').toUpperCase();
+  document.getElementById('gradeLabelText').textContent = r.overall.label || gradeLabel(overall);
+  document.getElementById('gradeScore').textContent = overall.toFixed(1);
+  document.getElementById('gradeScore').style.color = color;
+  document.getElementById('gradeHero').style.borderLeftColor = color;
+
+  const cats = [{key:'centering',label:'Centering',icon:'🎯'},{key:'corners',label:'Corners',icon:'📐'},{key:'surface',label:'Surface',icon:'🔍'},{key:'edges',label:'Edges',icon:'📏'}];
+  document.getElementById('scoreRows').innerHTML = cats.map((c,i) => {
+    const d = r[c.key], col = scoreColor(d.score);
+    return `<div class="score-row" style="animation-delay:${i*0.07}s"><div class="score-row-top"><div class="score-row-left"><span class="score-icon">${c.icon}</span><div><div class="score-cat-name">${c.label}</div><div class="score-descriptor">${d.descriptor}</div></div></div><div class="score-num-badge" style="color:${col}">${d.score.toFixed(1)}</div></div><div class="bar-track"><div class="bar-fill" style="width:${(d.score/10)*100}%;background:${col};"></div></div></div>`;
+  }).join('');
+
+  document.getElementById('analysisCards').innerHTML = [...cats,{key:'overall',label:'Overall Assessment',icon:'⭐'}].map(c => {
+    const text = c.key==='overall' ? r.overall.summary : r[c.key].notes;
+    return `<div class="analysis-card"><div class="analysis-cat">${c.icon} ${c.label}</div><div class="analysis-text">${text}</div></div>`;
+  }).join('');
+}
+</script>
+</body>
+</html>
