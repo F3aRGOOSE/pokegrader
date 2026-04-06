@@ -14,145 +14,140 @@
   --fd:'Archivo Black',sans-serif;--fb:'Archivo',sans-serif;
 }
 body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100vh;max-width:480px;margin:0 auto;overflow-x:hidden}
-
 .header{padding:52px 20px 20px;display:flex;align-items:center;justify-content:space-between}
 .logo{font-family:var(--fd);font-size:26px;letter-spacing:-0.5px}
 .logo span{color:var(--yellow)}
 .pill{background:var(--yellow);color:#000;font-family:var(--fd);font-size:10px;letter-spacing:1px;padding:5px 10px;border-radius:20px}
-
 .screen{display:none;padding:0 20px 48px;animation:fi .3s ease}
 .screen.active{display:block}
 @keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
 .home-btn{display:flex;align-items:center;gap:6px;background:transparent;border:none;color:var(--muted);font-family:var(--fb);font-size:14px;cursor:pointer;padding:0 0 18px}
-
 .btn-p{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:17px;background:var(--yellow);color:#000;font-family:var(--fd);font-size:15px;border:none;border-radius:16px;cursor:pointer;margin-bottom:11px;transition:transform .15s,opacity .15s}
 .btn-p:active{transform:scale(.97);opacity:.9}
 .btn-s{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:17px;background:var(--card);color:var(--text);font-family:var(--fd);font-size:15px;border:1.5px solid var(--border);border-radius:16px;cursor:pointer;margin-bottom:11px}
 .btn-s:active{transform:scale(.97)}
 .btn-g{display:flex;align-items:center;justify-content:center;width:100%;padding:13px;background:transparent;color:var(--muted);font-family:var(--fb);font-size:14px;border:none;cursor:pointer}
-
 .features{margin-top:36px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .fc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px}
 .fc .ic{font-size:20px;margin-bottom:5px}
 .fc .lb{font-family:var(--fd);font-size:12px;line-height:1.2}
 .fc .ds{color:var(--muted);font-size:11px;margin-top:2px;font-weight:300}
 
-/* ── CAMERA ── */
+/* CAMERA */
 #camOverlay{display:none;position:fixed;inset:0;background:#000;z-index:999;flex-direction:column}
 #camOverlay.open{display:flex}
 #vidFeed{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 #snapCanvas{display:none}
-
 .cam-ui{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
 .cam-guide-wrap{position:relative;width:68vw;aspect-ratio:2.5/3.5}
 .cam-card-border{position:absolute;inset:0;border:2px solid rgba(255,255,255,0.25);border-radius:10px;transition:border-color .3s}
-
-/* SVG progress ring around card */
 .cam-svg{position:absolute;inset:-6px;width:calc(100% + 12px);height:calc(100% + 12px);pointer-events:none}
 .cam-progress{fill:none;stroke:var(--yellow);stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .15s ease,stroke .3s}
-
-.corner{position:absolute;width:18px;height:18px;border-color:var(--yellow);border-style:solid;transition:border-color .3s}
+.corner{position:absolute;width:18px;height:18px;border-color:var(--yellow);border-style:solid}
 .corner.tl{top:-2px;left:-2px;border-width:3px 0 0 3px;border-radius:3px 0 0 0}
 .corner.tr{top:-2px;right:-2px;border-width:3px 3px 0 0;border-radius:0 3px 0 0}
 .corner.bl{bottom:-2px;left:-2px;border-width:0 0 3px 3px;border-radius:0 0 0 3px}
 .corner.br{bottom:-2px;right:-2px;border-width:0 3px 3px 0;border-radius:0 0 3px 0}
-
-.cam-checks{position:absolute;bottom:-100px;left:50%;transform:translateX(-50%);display:flex;gap:10px;white-space:nowrap}
-.check-pill{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:5px 10px;font-family:var(--fd);font-size:11px;letter-spacing:.5px;backdrop-filter:blur(8px);transition:border-color .3s,color .3s}
-.check-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .3s}
-.check-pill.pass .check-dot{background:var(--green)}
-.check-pill.pass{border-color:rgba(52,199,89,0.4);color:var(--green)}
-.check-pill.fail .check-dot{background:var(--red)}
-.check-pill.fail{border-color:rgba(255,59,48,0.3);color:var(--red)}
-
-.cam-badge{position:absolute;top:-44px;left:50%;transform:translateX(-50%);font-family:var(--fd);font-size:13px;letter-spacing:1px;color:rgba(255,255,255,0.5);white-space:nowrap;transition:color .3s;text-align:center}
-.cam-cancel{position:absolute;top:44px;left:16px;background:rgba(0,0,0,0.55);color:#fff;border:none;border-radius:20px;padding:7px 14px;font-family:var(--fb);font-size:14px;cursor:pointer;backdrop-filter:blur(8px)}
+.cam-checks{position:absolute;bottom:-90px;left:50%;transform:translateX(-50%);display:flex;gap:8px;white-space:nowrap}
+.chk{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 10px;font-family:var(--fd);font-size:11px;letter-spacing:.5px;backdrop-filter:blur(8px);transition:all .3s}
+.chk-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .3s}
+.chk.pass .chk-dot{background:var(--green)}.chk.pass{border-color:rgba(52,199,89,.4);color:var(--green)}
+.chk.fail .chk-dot{background:var(--red)}.chk.fail{border-color:rgba(255,59,48,.3);color:var(--red)}
+.cam-badge{position:absolute;top:-44px;left:50%;transform:translateX(-50%);font-family:var(--fd);font-size:13px;letter-spacing:1px;color:rgba(255,255,255,.5);white-space:nowrap;transition:color .3s;text-align:center}
+.cam-cancel{position:absolute;top:44px;left:16px;background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:20px;padding:7px 14px;font-family:var(--fb);font-size:14px;cursor:pointer;backdrop-filter:blur(8px)}
 .cam-flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:9999;transition:opacity .08s}
 .cam-flash.on{opacity:1}
 
-/* ── BORDER TOOL ── */
-#borderScreen .preview-wrap{position:relative;width:100%;background:#000;border-radius:16px;overflow:hidden;margin-bottom:16px;touch-action:none}
-#borderScreen .preview-wrap img{width:100%;display:block;opacity:0.85}
-#borderCanvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+/* BORDER TOOL - HTML DIV LINES */
+.bwrap{position:relative;width:100%;background:#000;border-radius:16px;overflow:hidden;margin-bottom:16px;user-select:none}
+.bwrap img{width:100%;display:block}
+
+/* The 4 draggable lines */
+.bline{position:absolute;z-index:10;touch-action:none}
+.bline-h{left:0;right:0;height:44px;cursor:ns-resize;transform:translateY(-50%)}
+.bline-v{top:0;bottom:0;width:44px;cursor:ew-resize;transform:translateX(-50%)}
+.bline-inner-h{position:absolute;left:0;right:0;top:50%;height:3px;transform:translateY(-50%);pointer-events:none}
+.bline-inner-v{position:absolute;top:0;bottom:0;left:50%;width:3px;transform:translateX(-50%);pointer-events:none}
+
+/* Handle knob */
+.bhandle{position:absolute;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.bline-h .bhandle{left:50%;top:50%;transform:translate(-50%,-50%)}
+.bline-v .bhandle{left:50%;top:50%;transform:translate(-50%,-50%)}
+
+/* Shaded outer regions */
+.bshade{position:absolute;background:rgba(0,0,0,.45);pointer-events:none;z-index:5}
+
+/* Stats */
+.bstats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.bst{background:var(--card);border-radius:10px;padding:10px 12px}
+.bst-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
+.bst-v{font-family:var(--fd);font-size:16px}
+.bst-s{font-size:11px;color:var(--muted);margin-top:1px}
 
 .border-hint{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px}
-.border-hint-icon{font-size:20px;flex-shrink:0}
-.border-hint-text{font-size:13px;color:var(--muted);line-height:1.5;font-weight:300}
-.border-hint-text strong{color:var(--text)}
+.bh-icon{font-size:20px;flex-shrink:0}
+.bh-text{font-size:13px;color:var(--muted);line-height:1.5;font-weight:300}
+.bh-text strong{color:var(--text)}
 
-.border-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-.bstat{background:var(--card);border-radius:10px;padding:10px 12px}
-.bstat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
-.bstat-value{font-family:var(--fd);font-size:16px}
-.bstat-sub{font-size:11px;color:var(--muted);margin-top:1px}
-
-/* ── INPUTS ── */
-.inp-group{margin-bottom:14px}
-.inp-label{font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:7px;font-weight:500;text-transform:uppercase}
+/* INPUTS */
+.ig{margin-bottom:14px}
+.il{font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:7px;font-weight:500;text-transform:uppercase}
 .inp{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:13px 15px;color:var(--text);font-family:var(--fb);font-size:16px;outline:none;transition:border-color .2s}
 .inp:focus{border-color:var(--yellow)}
 .inp::placeholder{color:var(--muted)}
 .err{background:rgba(255,59,48,.12);border:1px solid rgba(255,59,48,.3);border-radius:12px;padding:13px 15px;color:#FF6B6B;font-size:13px;margin-bottom:14px;display:none;line-height:1.5}
 
-/* ── LOADING ── */
-.load-wrap{padding:60px 0;display:flex;flex-direction:column;align-items:center;gap:22px}
+/* LOADING */
+.lw{padding:60px 0;display:flex;flex-direction:column;align-items:center;gap:22px}
 .pokeball{width:68px;height:68px;border-radius:50%;border:4px solid var(--border);position:relative;animation:spin 1s linear infinite;overflow:hidden}
 .pokeball::before{content:'';position:absolute;top:0;left:0;right:0;height:50%;background:var(--red)}
 .pokeball::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:15px;height:15px;border-radius:50%;background:var(--bg);border:3px solid var(--border);z-index:1}
 @keyframes spin{to{transform:rotate(360deg)}}
-.load-title{font-family:var(--fd);font-size:19px;text-align:center}
-.load-steps{width:100%;display:flex;flex-direction:column;gap:9px;margin-top:6px}
-.lstep{display:flex;align-items:center;gap:11px;padding:11px 15px;background:var(--card);border-radius:11px;font-size:13px;color:var(--muted);transition:all .4s;border:1px solid transparent}
-.lstep.done{color:var(--text)}.lstep.done .sd{background:var(--green)}
-.lstep.active{color:var(--text);border-color:var(--yellow)}.lstep.active .sd{background:var(--yellow);animation:pulse .8s infinite}
+.lt{font-family:var(--fd);font-size:19px;text-align:center}
+.lsteps{width:100%;display:flex;flex-direction:column;gap:9px;margin-top:6px}
+.ls{display:flex;align-items:center;gap:11px;padding:11px 15px;background:var(--card);border-radius:11px;font-size:13px;color:var(--muted);transition:all .4s;border:1px solid transparent}
+.ls.done{color:var(--text)}.ls.done .sd{background:var(--green)}
+.ls.active{color:var(--text);border-color:var(--yellow)}.ls.active .sd{background:var(--yellow);animation:pulse .8s infinite}
 .sd{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* ── RESULTS ── */
-.grade-hero{background:var(--card);border-radius:22px;padding:26px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;border-left:4px solid var(--yellow)}
+/* RESULTS */
+.gh{background:var(--card);border-radius:22px;padding:26px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;border-left:4px solid var(--yellow)}
 .gcn{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
 .glt{font-family:var(--fd);font-size:21px;line-height:1.1;margin-bottom:3px}
 .gsl{font-size:13px;color:var(--muted);font-weight:300}
 .gsw{text-align:right}
-.gs{font-family:var(--fd);font-size:60px;line-height:1;letter-spacing:-2px}
+.gscore{font-family:var(--fd);font-size:60px;line-height:1;letter-spacing:-2px}
 .gss{font-size:11px;color:var(--muted);margin-top:1px}
 .sec{font-family:var(--fd);font-size:12px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin:22px 0 10px}
-
-.score-row{background:var(--card);border-radius:15px;padding:15px 17px;margin-bottom:9px;animation:fi .4s ease both}
+.sr{background:var(--card);border-radius:15px;padding:15px 17px;margin-bottom:9px;animation:fi .4s ease both}
 .srt{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
 .srl{display:flex;align-items:center;gap:9px}
-.sicon{font-size:19px}
-.scn{font-family:var(--fd);font-size:14px}
+.si{font-size:19px}.scn{font-family:var(--fd);font-size:14px}
 .scd{font-size:11px;color:var(--muted);margin-top:1px;font-weight:300}
 .snb{font-family:var(--fd);font-size:19px;min-width:38px;text-align:right}
 .bt{height:5px;background:var(--card2);border-radius:3px;overflow:hidden}
 .bf{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
-
-/* BORDER RESULTS */
-.bmcard{background:var(--card);border-radius:18px;padding:18px;margin-bottom:9px}
+.bmc{background:var(--card);border-radius:18px;padding:18px;margin-bottom:9px}
 .bdg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:11px}
 .brp{background:var(--card2);border-radius:10px;padding:10px 12px}
 .brpl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
 .brpv{font-family:var(--fd);font-size:15px}
 .brps{font-size:11px;color:var(--muted);margin-top:1px}
-.cverd{display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:10px;font-size:13px;font-weight:500}
-.vdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-
-/* DEFECT */
-.defcard{background:var(--card);border-radius:18px;padding:18px;margin-bottom:9px}
-.defimgs{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px}
-.diwrap{position:relative;border-radius:10px;overflow:hidden;background:#000;aspect-ratio:2.5/3.5}
-.diwrap canvas{width:100%;height:100%;display:block}
-.dilabel{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);font-family:var(--fd);font-size:9px;letter-spacing:1px;background:rgba(0,0,0,.7);color:#fff;padding:2px 7px;border-radius:3px;white-space:nowrap}
-.defleg{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:11px}
+.cv{display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:10px;font-size:13px;font-weight:500}
+.vd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.defc{background:var(--card);border-radius:18px;padding:18px;margin-bottom:9px}
+.dis{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px}
+.diw{position:relative;border-radius:10px;overflow:hidden;background:#000;aspect-ratio:2.5/3.5}
+.diw canvas{width:100%;height:100%;display:block}
+.dil{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);font-family:var(--fd);font-size:9px;letter-spacing:1px;background:rgba(0,0,0,.7);color:#fff;padding:2px 7px;border-radius:3px;white-space:nowrap}
+.dleg{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:11px}
 .dli{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted)}
 .dld{width:7px;height:7px;border-radius:50%}
-.deflist{display:flex;flex-direction:column;gap:5px}
+.dfl{display:flex;flex-direction:column;gap:5px}
 .dfi{display:flex;align-items:flex-start;gap:9px;padding:9px 11px;background:var(--card2);border-radius:9px;font-size:12px}
 .dfid{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:2px}
-
-.acard{background:var(--card);border-radius:15px;padding:18px;margin-bottom:9px}
+.ac{background:var(--card);border-radius:15px;padding:18px;margin-bottom:9px}
 .acat{font-family:var(--fd);font-size:12px;color:var(--muted);margin-bottom:7px;text-transform:uppercase;letter-spacing:.5px}
 .atxt{font-size:13px;line-height:1.65;color:#C7C7CC;font-weight:300}
 .divider{height:1px;background:var(--border);margin:22px 0}
@@ -169,12 +164,12 @@ input[type=file]{display:none}
 <!-- UPLOAD -->
 <div class="screen active" id="screen-upload">
   <div style="font-family:var(--fd);font-size:36px;line-height:1.1;letter-spacing:-1px;margin-bottom:11px">Grade your<br><span style="color:var(--yellow)">Pokémon</span><br>cards.</div>
-  <div style="color:var(--muted);font-size:14px;font-weight:300;line-height:1.5;margin-bottom:32px">Drag border lines to measure exactly. AI cross-references surface & defect scans for precise PSA-style grading.</div>
+  <div style="color:var(--muted);font-size:14px;font-weight:300;line-height:1.5;margin-bottom:32px">Drag border lines to measure exactly. AI cross-references dual scans for precise PSA-style grading.</div>
   <button class="btn-p" onclick="openCamera()"><span style="font-size:19px">📷</span> Auto-Scan Card</button>
   <button class="btn-s" onclick="document.getElementById('fi').click()"><span style="font-size:19px">🖼️</span> Upload from Library</button>
   <input type="file" id="fi" accept="image/*" onchange="handleFile(this.files[0])">
   <div class="features">
-    <div class="fc"><div class="ic">🎯</div><div class="lb">Smart Capture</div><div class="ds">Lighting + level checks</div></div>
+    <div class="fc"><div class="ic">🎯</div><div class="lb">Smart Capture</div><div class="ds">Lighting + level</div></div>
     <div class="fc"><div class="ic">📐</div><div class="lb">Drag to Measure</div><div class="ds">Exact border px</div></div>
     <div class="fc"><div class="ic">🔍</div><div class="lb">Dual Scan</div><div class="ds">Cross-ref defects</div></div>
     <div class="fc"><div class="ic">⭐</div><div class="lb">PSA Score</div><div class="ds">1–10 grade</div></div>
@@ -185,16 +180,43 @@ input[type=file]{display:none}
 <div class="screen" id="screen-border">
   <button class="home-btn" onclick="goHome()">← Home</button>
   <div class="border-hint">
-    <div class="border-hint-icon">📐</div>
-    <div class="border-hint-text"><strong>Drag the lines</strong> to the exact edges of your card border. This gives precise centering measurements.</div>
+    <div class="bh-icon">📐</div>
+    <div class="bh-text"><strong>Drag the coloured lines</strong> to the exact edges of your card. Yellow = top/bottom. Blue = left/right.</div>
   </div>
-  <div class="preview-wrap" id="borderWrap">
-    <img id="borderImg" src="" alt="Card">
-    <canvas id="borderCanvas"></canvas>
+
+  <!-- Image + overlay lines -->
+  <div class="bwrap" id="bwrap">
+    <img id="bimg" src="" alt="Card">
+    <!-- TOP line -->
+    <div class="bline bline-h" id="bl-top">
+      <div class="bline-inner-h" style="background:#FFD000"></div>
+      <div class="bhandle" style="background:#FFD000;color:#000">↕</div>
+    </div>
+    <!-- BOTTOM line -->
+    <div class="bline bline-h" id="bl-bottom">
+      <div class="bline-inner-h" style="background:#FFD000"></div>
+      <div class="bhandle" style="background:#FFD000;color:#000">↕</div>
+    </div>
+    <!-- LEFT line -->
+    <div class="bline bline-v" id="bl-left">
+      <div class="bline-inner-v" style="background:#0A84FF"></div>
+      <div class="bhandle" style="background:#0A84FF;color:#fff">↔</div>
+    </div>
+    <!-- RIGHT line -->
+    <div class="bline bline-v" id="bl-right">
+      <div class="bline-inner-v" style="background:#0A84FF"></div>
+      <div class="bhandle" style="background:#0A84FF;color:#fff">↔</div>
+    </div>
+    <!-- Shade overlays -->
+    <div class="bshade" id="sh-top"></div>
+    <div class="bshade" id="sh-bottom"></div>
+    <div class="bshade" id="sh-left"></div>
+    <div class="bshade" id="sh-right"></div>
   </div>
-  <div class="border-stats" id="borderStats"></div>
-  <div class="inp-group">
-    <div class="inp-label">Card Name (optional)</div>
+
+  <div class="bstats" id="bstats"></div>
+  <div class="ig">
+    <div class="il">Card Name (optional)</div>
     <input type="text" class="inp" id="cardName" placeholder="e.g. Charizard Base Set 1st Edition">
   </div>
   <div class="err" id="errorMsg"></div>
@@ -204,15 +226,15 @@ input[type=file]{display:none}
 
 <!-- LOADING -->
 <div class="screen" id="screen-loading">
-  <div class="load-wrap">
+  <div class="lw">
     <div class="pokeball"></div>
-    <div><div class="load-title">Grading your card...</div></div>
-    <div class="load-steps">
-      <div class="lstep" id="s1"><div class="sd"></div>Cropping to card area</div>
-      <div class="lstep" id="s2"><div class="sd"></div>Generating surface scan</div>
-      <div class="lstep" id="s3"><div class="sd"></div>Cross-referencing defects</div>
-      <div class="lstep" id="s4"><div class="sd"></div>Analysing with exact measurements</div>
-      <div class="lstep" id="s5"><div class="sd"></div>Computing final grade</div>
+    <div><div class="lt">Grading your card...</div></div>
+    <div class="lsteps">
+      <div class="ls" id="s1"><div class="sd"></div>Cropping to card area</div>
+      <div class="ls" id="s2"><div class="sd"></div>Generating surface scan</div>
+      <div class="ls" id="s3"><div class="sd"></div>Cross-referencing defects</div>
+      <div class="ls" id="s4"><div class="sd"></div>Analysing measurements</div>
+      <div class="ls" id="s5"><div class="sd"></div>Computing final grade</div>
     </div>
   </div>
 </div>
@@ -220,39 +242,36 @@ input[type=file]{display:none}
 <!-- RESULTS -->
 <div class="screen" id="screen-results">
   <button class="home-btn" onclick="goHome()">← Home</button>
-  <div class="grade-hero" id="gradeHero">
+  <div class="gh" id="gradeHero">
     <div>
       <div class="gcn" id="gcn">POKÉMON CARD</div>
       <div class="glt" id="glt">—</div>
       <div class="gsl">PSA-Style Grade</div>
     </div>
     <div class="gsw">
-      <div class="gs" id="gs">—</div>
+      <div class="gscore" id="gs">—</div>
       <div class="gss">/ 10</div>
     </div>
   </div>
-
   <div class="sec">📐 Border Measurements</div>
-  <div class="bmcard">
+  <div class="bmc">
     <div class="bdg" id="bdg"></div>
-    <div class="cverd" id="cverd"></div>
+    <div class="cv" id="cverd"></div>
   </div>
-
   <div class="sec">🔍 Surface Defect Imaging</div>
-  <div class="defcard">
-    <div class="defimgs">
-      <div class="diwrap"><canvas id="embossC"></canvas><div class="dilabel">SURFACE SCAN</div></div>
-      <div class="diwrap"><canvas id="defectC"></canvas><div class="dilabel">DEFECT MAP</div></div>
+  <div class="defc">
+    <div class="dis">
+      <div class="diw"><canvas id="embossC"></canvas><div class="dil">SURFACE SCAN</div></div>
+      <div class="diw"><canvas id="defectC"></canvas><div class="dil">DEFECT MAP</div></div>
     </div>
-    <div class="defleg">
+    <div class="dleg">
       <div class="dli"><div class="dld" style="background:#FF3B30"></div>Scratch/Wear</div>
       <div class="dli"><div class="dld" style="background:#FF9500"></div>Print Defect</div>
       <div class="dli"><div class="dld" style="background:#FFD000"></div>Crease</div>
       <div class="dli"><div class="dld" style="background:#0A84FF"></div>Corner Wear</div>
     </div>
-    <div class="deflist" id="deflist"></div>
+    <div class="dfl" id="deflist"></div>
   </div>
-
   <div class="sec">Category Scores</div>
   <div id="scoreRows"></div>
   <div class="sec">Detailed Analysis</div>
@@ -272,14 +291,14 @@ input[type=file]{display:none}
         <div class="corner tl"></div><div class="corner tr"></div>
         <div class="corner bl"></div><div class="corner br"></div>
       </div>
-      <svg class="cam-svg" id="camSvg" viewBox="0 0 100 140" preserveAspectRatio="none">
+      <svg class="cam-svg" viewBox="0 0 100 140" preserveAspectRatio="none">
         <rect class="cam-progress" id="camProg" x="2" y="2" width="96" height="136" rx="7"/>
       </svg>
       <div class="cam-badge" id="camBadge">ALIGN CARD</div>
       <div class="cam-checks" id="camChecks">
-        <div class="check-pill" id="chk-center"><div class="check-dot"></div>CENTER</div>
-        <div class="check-pill" id="chk-light"><div class="check-dot"></div>LIGHT</div>
-        <div class="check-pill" id="chk-level"><div class="check-dot"></div>LEVEL</div>
+        <div class="chk" id="chk-center"><div class="chk-dot"></div>CENTER</div>
+        <div class="chk" id="chk-light"><div class="chk-dot"></div>LIGHT</div>
+        <div class="chk" id="chk-level"><div class="chk-dot"></div>LEVEL</div>
       </div>
     </div>
   </div>
@@ -287,344 +306,194 @@ input[type=file]{display:none}
 </div>
 
 <script>
-const WORKER = 'https://pokegrader-api.jaydengoosen1.workers.dev';
-let imgB64=null, imgSrc=null, mediaType='image/jpeg';
-let camStream=null, alignTimer=null, stepTimer=null;
-let holdFrames=0;
-// Border tool state
-let borders={top:0.15,bottom:0.15,left:0.12,right:0.12}; // as fraction of img dims
-let dragging=null, dragStartY=0, dragStartX=0, dragStartVal=0;
-let croppedB64=null;
+const WORKER='https://pokegrader-api.jaydengoosen1.workers.dev';
+let imgB64=null,imgSrc=null,mediaType='image/jpeg';
+let camStream=null,alignTimer=null,stepTimer=null,holdFrames=0;
 
-// ── NAV ──
-function show(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+id).classList.add('active');
-  window.scrollTo(0,0);
-}
-function goHome(){
-  imgB64=null;imgSrc=null;croppedB64=null;
-  document.getElementById('cardName').value='';
-  document.getElementById('errorMsg').style.display='none';
-  document.getElementById('fi').value='';
-  closeCamera();
-  show('upload');
-}
+// Border positions as percentages (0-1) of image display size
+let bTop=0.10, bBottom=0.90, bLeft=0.08, bRight=0.92;
 
-// ── FILE UPLOAD ──
+// NAV
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');window.scrollTo(0,0);}
+function goHome(){imgB64=null;imgSrc=null;document.getElementById('cardName').value='';document.getElementById('errorMsg').style.display='none';document.getElementById('fi').value='';closeCamera();show('upload');}
+
+// FILE
 function handleFile(file){
   if(!file||!file.type.startsWith('image/'))return;
   mediaType=file.type;
   const r=new FileReader();
-  r.onload=e=>{
-    imgB64=e.target.result.split(',')[1];
-    imgSrc=e.target.result;
-    initBorderTool();
-  };
+  r.onload=e=>{imgB64=e.target.result.split(',')[1];imgSrc=e.target.result;loadBorderTool();};
   r.readAsDataURL(file);
 }
 
-// ── CAMERA ──
-async function openCamera(){
-  document.getElementById('camOverlay').classList.add('open');
-  holdFrames=0;
-  try{
-    camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1920},height:{ideal:1080}}});
-    document.getElementById('vidFeed').srcObject=camStream;
-    startChecks();
-  }catch(e){
-    document.getElementById('camOverlay').classList.remove('open');
-    alert('Camera denied. Use Upload from Library.');
-  }
-}
-function closeCamera(){
-  if(camStream)camStream.getTracks().forEach(t=>t.stop());
-  camStream=null;
-  if(alignTimer)clearInterval(alignTimer);
-  document.getElementById('camOverlay').classList.remove('open');
-  holdFrames=0;
-}
-
-function startChecks(){
-  const video=document.getElementById('vidFeed');
-  const prog=document.getElementById('camProg');
-  const badge=document.getElementById('camBadge');
-  const border=document.getElementById('camBorder');
-
-  alignTimer=setInterval(()=>{
-    if(!video.videoWidth)return;
-    const tmp=document.createElement('canvas');
-    tmp.width=80;tmp.height=112;
-    const ctx=tmp.getContext('2d');
-    ctx.drawImage(video,0,0,80,112);
-    const px=ctx.getImageData(0,0,80,112).data;
-
-    // CENTER: check that bright card-like pixels dominate center region
-    let centerBright=0;
-    for(let y=28;y<84;y++)for(let x=16;x<64;x++){
-      const i=(y*80+x)*4;
-      const b=(px[i]+px[i+1]+px[i+2])/3;
-      if(b>80&&b<245)centerBright++;
-    }
-    const centerOk=centerBright/(56*48)>0.6;
-
-    // LIGHT: check average brightness in card area not too dark or blown
-    let sum=0,count=0;
-    for(let y=20;y<92;y++)for(let x=12;x<68;x++){
-      const i=(y*80+x)*4;
-      sum+=(px[i]+px[i+1]+px[i+2])/3;count++;
-    }
-    const avg=sum/count;
-    const lightOk=avg>55&&avg<210;
-
-    // LEVEL: compare left half brightness vs right half (tilt causes imbalance)
-    let leftSum=0,rightSum=0,half=0;
-    for(let y=20;y<92;y++)for(let x=12;x<40;x++){
-      const i=(y*80+x)*4;leftSum+=(px[i]+px[i+1]+px[i+2])/3;half++;
-    }
-    for(let y=20;y<92;y++)for(let x=40;x<68;x++){
-      const i=(y*80+x)*4;rightSum+=(px[i]+px[i+1]+px[i+2])/3;
-    }
-    const levelOk=Math.abs(leftSum-rightSum)/half<30;
-
-    // Update check pills
-    setCheck('chk-center',centerOk);
-    setCheck('chk-light',lightOk);
-    setCheck('chk-level',levelOk);
-
-    const allPass=centerOk&&lightOk&&levelOk;
-    const score=((centerOk?33:0)+(lightOk?33:0)+(levelOk?34:0));
-
-    // Progress ring
-    const perim=2*(96+136);
-    prog.style.strokeDasharray=perim;
-    prog.style.strokeDashoffset=perim*(1-score/100);
-    const col=allPass?'#34C759':score>50?'#FFD000':'#FF3B30';
-    prog.style.stroke=col;
-    border.style.borderColor=col;
-
-    if(allPass){
-      holdFrames++;
-      badge.textContent=`HOLD STEADY — ${holdFrames}/12`;
-      badge.style.color='#34C759';
-      if(holdFrames>=12){clearInterval(alignTimer);doCapture();}
-    }else{
-      holdFrames=0;
-      badge.textContent=score>50?'ALMOST THERE':'ALIGN CARD';
-      badge.style.color=score>50?'#FFD000':'rgba(255,255,255,0.4)';
-    }
-  },120);
-}
-
-function setCheck(id,pass){
-  const el=document.getElementById(id);
-  el.classList.toggle('pass',pass);
-  el.classList.toggle('fail',!pass);
-}
-
-function doCapture(){
-  const flash=document.getElementById('camFlash');
-  flash.classList.add('on');
-  setTimeout(()=>flash.classList.remove('on'),120);
-  const video=document.getElementById('vidFeed');
-  const canvas=document.getElementById('snapCanvas');
-  canvas.width=video.videoWidth;canvas.height=video.videoHeight;
-  canvas.getContext('2d').drawImage(video,0,0);
-  const url=canvas.toDataURL('image/jpeg',0.93);
-  imgB64=url.split(',')[1];imgSrc=url;mediaType='image/jpeg';
-  setTimeout(()=>{closeCamera();initBorderTool();},180);
-}
-
-// ── BORDER TOOL ──
-function initBorderTool(){
-  const img=document.getElementById('borderImg');
-  img.onload=()=>{ initCanvas(); updateBorderStats(); show('border'); };
+function loadBorderTool(){
+  const img=document.getElementById('bimg');
+  img.onload=()=>{
+    // Reset borders to default
+    bTop=0.10;bBottom=0.90;bLeft=0.08;bRight=0.92;
+    updateLines();
+    updateStats();
+    show('border');
+    // Setup drag after display
+    setTimeout(setupDrag,100);
+  };
   img.src=imgSrc;
 }
 
-function initCanvas(){
-  const wrap=document.getElementById('borderWrap');
-  const img=document.getElementById('borderImg');
-  const canvas=document.getElementById('borderCanvas');
-  const W=img.offsetWidth, H=img.offsetHeight;
-  canvas.width=W; canvas.height=H;
-  canvas.style.width=W+'px'; canvas.style.height=H+'px';
+// UPDATE LINE POSITIONS
+function updateLines(){
+  const wrap=document.getElementById('bwrap');
+  const H=wrap.offsetHeight||wrap.clientHeight;
+  const W=wrap.offsetWidth||wrap.clientWidth;
+  if(!H||!W)return;
 
-  // Default lines at 12% in from each edge
-  borders={top:0.13,bottom:0.87,left:0.10,right:0.90};
-  drawBorderLines();
+  // Top line
+  const top=document.getElementById('bl-top');
+  top.style.top=(bTop*100)+'%';
+  top.style.left='0'; top.style.right='0';
 
-  // Touch events
-  canvas.addEventListener('touchstart',onTouchStart,{passive:false});
-  canvas.addEventListener('touchmove',onTouchMove,{passive:false});
-  canvas.addEventListener('touchend',onTouchEnd);
-  // Mouse events
-  canvas.addEventListener('mousedown',onMouseDown);
-  canvas.addEventListener('mousemove',onMouseMove);
-  canvas.addEventListener('mouseup',onMouseUp);
+  // Bottom line
+  const bot=document.getElementById('bl-bottom');
+  bot.style.top=(bBottom*100)+'%';
+  bot.style.left='0'; bot.style.right='0';
+
+  // Left line
+  const lft=document.getElementById('bl-left');
+  lft.style.left=(bLeft*100)+'%';
+  lft.style.top='0'; lft.style.bottom='0';
+
+  // Right line
+  const rgt=document.getElementById('bl-right');
+  rgt.style.left=(bRight*100)+'%';
+  rgt.style.top='0'; rgt.style.bottom='0';
+
+  // Shade overlays
+  document.getElementById('sh-top').style.cssText=`top:0;left:0;right:0;height:${bTop*100}%`;
+  document.getElementById('sh-bottom').style.cssText=`bottom:0;left:0;right:0;height:${(1-bBottom)*100}%`;
+  document.getElementById('sh-left').style.cssText=`top:${bTop*100}%;bottom:${(1-bBottom)*100}%;left:0;width:${bLeft*100}%`;
+  document.getElementById('sh-right').style.cssText=`top:${bTop*100}%;bottom:${(1-bBottom)*100}%;right:0;width:${(1-bRight)*100}%`;
 }
 
-function drawBorderLines(){
-  const canvas=document.getElementById('borderCanvas');
-  const ctx=canvas.getContext('2d');
-  const W=canvas.width, H=canvas.height;
-  ctx.clearRect(0,0,W,H);
+// DRAG SETUP
+function setupDrag(){
+  const wrap=document.getElementById('bwrap');
+  let active=null;
 
-  const lines=[
-    {id:'top',   x1:0,y1:borders.top*H,   x2:W,y2:borders.top*H,   col:'#FFD000',horiz:true},
-    {id:'bottom',x1:0,y1:borders.bottom*H, x2:W,y2:borders.bottom*H,col:'#FFD000',horiz:true},
-    {id:'left',  x1:borders.left*W,y1:0,   x2:borders.left*W,y2:H,  col:'#0A84FF',horiz:false},
-    {id:'right', x1:borders.right*W,y1:0,  x2:borders.right*W,y2:H, col:'#0A84FF',horiz:false},
-  ];
+  function getRelPos(e){
+    const r=wrap.getBoundingClientRect();
+    const touch=e.touches?e.touches[0]:e;
+    return{
+      x:Math.max(0,Math.min(1,(touch.clientX-r.left)/r.width)),
+      y:Math.max(0,Math.min(1,(touch.clientY-r.top)/r.height))
+    };
+  }
 
-  lines.forEach(l=>{
-    ctx.save();
-    ctx.setLineDash([6,4]);
-    ctx.lineWidth=2;
-    ctx.strokeStyle=l.col;
-    ctx.globalAlpha=0.85;
-    ctx.beginPath();
-    ctx.moveTo(l.x1,l.y1);
-    ctx.lineTo(l.x2,l.y2);
-    ctx.stroke();
+  function startDrag(lineId){
+    return function(e){
+      e.preventDefault();e.stopPropagation();
+      active=lineId;
+    };
+  }
 
-    // Handle
-    const hx=l.horiz?W/2:l.x1;
-    const hy=l.horiz?l.y1:H/2;
-    ctx.globalAlpha=1;
-    ctx.setLineDash([]);
-    ctx.beginPath();
-    ctx.arc(hx,hy,14,0,Math.PI*2);
-    ctx.fillStyle=l.col;
-    ctx.fill();
-    ctx.fillStyle='#000';
-    ctx.font='bold 10px Archivo Black,sans-serif';
-    ctx.textAlign='center';
-    ctx.textBaseline='middle';
-    ctx.fillText(l.horiz?'↕':'↔',hx,hy);
-    ctx.restore();
+  function onMove(e){
+    if(!active)return;
+    e.preventDefault();
+    const p=getRelPos(e);
+    if(active==='top')    bTop=Math.max(0.01,Math.min(bBottom-0.05,p.y));
+    if(active==='bottom') bBottom=Math.max(bTop+0.05,Math.min(0.99,p.y));
+    if(active==='left')   bLeft=Math.max(0.01,Math.min(bRight-0.05,p.x));
+    if(active==='right')  bRight=Math.max(bLeft+0.05,Math.min(0.99,p.x));
+    updateLines();updateStats();
+  }
+
+  function onEnd(){active=null;}
+
+  // Attach to each line
+  ['top','bottom','left','right'].forEach(id=>{
+    const el=document.getElementById('bl-'+id);
+    el.addEventListener('touchstart',startDrag(id),{passive:false});
+    el.addEventListener('mousedown',startDrag(id));
   });
+
+  // Move/end on wrap and document
+  wrap.addEventListener('touchmove',onMove,{passive:false});
+  wrap.addEventListener('mousemove',onMove);
+  document.addEventListener('touchend',onEnd);
+  document.addEventListener('mouseup',onEnd);
 }
 
-function getPos(e,canvas){
-  const r=canvas.getBoundingClientRect();
-  const touch=e.touches?e.touches[0]:e;
-  return{x:(touch.clientX-r.left)*(canvas.width/r.width),y:(touch.clientY-r.top)*(canvas.height/r.height)};
+function ratioCol(a,b){const r=Math.max(a,b)/(a+b);if(r<=.52)return'#34C759';if(r<=.55)return'#FFD000';if(r<=.60)return'#FF9500';return'#FF3B30';}
+
+function updateStats(){
+  const img=document.getElementById('bimg');
+  const W=img.naturalWidth||img.offsetWidth||100;
+  const H=img.naturalHeight||img.offsetHeight||100;
+  const topPx=Math.round(bTop*H);
+  const botPx=Math.round((1-bBottom)*H);
+  const lftPx=Math.round(bLeft*W);
+  const rgtPx=Math.round((1-bRight)*W);
+  const tbT=topPx+botPx,lrT=lftPx+rgtPx;
+  const tc=ratioCol(topPx,botPx),lc=ratioCol(lftPx,rgtPx);
+  document.getElementById('bstats').innerHTML=`
+    <div class="bst"><div class="bst-l">Top Border</div><div class="bst-v" style="color:${tc}">${topPx}px</div><div class="bst-s">${Math.round(topPx/tbT*100)}% vertical</div></div>
+    <div class="bst"><div class="bst-l">Bottom Border</div><div class="bst-v" style="color:${tc}">${botPx}px</div><div class="bst-s">${Math.round(botPx/tbT*100)}% vertical</div></div>
+    <div class="bst"><div class="bst-l">Left Border</div><div class="bst-v" style="color:${lc}">${lftPx}px</div><div class="bst-s">${Math.round(lftPx/lrT*100)}% horizontal</div></div>
+    <div class="bst"><div class="bst-l">Right Border</div><div class="bst-v" style="color:${lc}">${rgtPx}px</div><div class="bst-s">${Math.round(rgtPx/lrT*100)}% horizontal</div></div>`;
 }
 
-function whichLine(pos,canvas){
-  const W=canvas.width,H=canvas.height,HIT=24;
-  if(Math.abs(pos.y-borders.top*H)<HIT)return'top';
-  if(Math.abs(pos.y-borders.bottom*H)<HIT)return'bottom';
-  if(Math.abs(pos.x-borders.left*W)<HIT)return'left';
-  if(Math.abs(pos.x-borders.right*W)<HIT)return'right';
-  return null;
-}
-
-function onTouchStart(e){e.preventDefault();const c=e.currentTarget;const p=getPos(e,c);dragging=whichLine(p,c);}
-function onTouchMove(e){e.preventDefault();if(!dragging)return;moveLine(getPos(e,e.currentTarget));}
-function onTouchEnd(){dragging=null;updateBorderStats();}
-function onMouseDown(e){const c=e.currentTarget;dragging=whichLine(getPos(e,c),c);}
-function onMouseMove(e){if(!dragging)return;moveLine(getPos(e,e.currentTarget));}
-function onMouseUp(){dragging=null;updateBorderStats();}
-
-function moveLine(pos){
-  const canvas=document.getElementById('borderCanvas');
-  const W=canvas.width,H=canvas.height;
-  if(dragging==='top')borders.top=Math.max(0.01,Math.min(borders.bottom-0.05,pos.y/H));
-  if(dragging==='bottom')borders.bottom=Math.max(borders.top+0.05,Math.min(0.99,pos.y/H));
-  if(dragging==='left')borders.left=Math.max(0.01,Math.min(borders.right-0.05,pos.x/W));
-  if(dragging==='right')borders.right=Math.max(borders.left+0.05,Math.min(0.99,pos.x/W));
-  drawBorderLines();
-  updateBorderStats();
-}
-
-function updateBorderStats(){
-  const img=document.getElementById('borderImg');
+function getMeasured(){
+  const img=document.getElementById('bimg');
   const W=img.naturalWidth||img.offsetWidth;
   const H=img.naturalHeight||img.offsetHeight;
-
-  const topPx=Math.round(borders.top*H);
-  const bottomPx=Math.round((1-borders.bottom)*H);
-  const leftPx=Math.round(borders.left*W);
-  const rightPx=Math.round((1-borders.right)*W);
-
-  const tbTotal=topPx+bottomPx;
-  const lrTotal=leftPx+rightPx;
-  const tbC=ratioCol(topPx,bottomPx);
-  const lrC=ratioCol(leftPx,rightPx);
-
-  document.getElementById('borderStats').innerHTML=`
-    <div class="bstat"><div class="bstat-label">Top Border</div><div class="bstat-value" style="color:${tbC}">${topPx}px</div><div class="bstat-sub">${Math.round(topPx/tbTotal*100)}% of V</div></div>
-    <div class="bstat"><div class="bstat-label">Bottom Border</div><div class="bstat-value" style="color:${tbC}">${bottomPx}px</div><div class="bstat-sub">${Math.round(bottomPx/tbTotal*100)}% of V</div></div>
-    <div class="bstat"><div class="bstat-label">Left Border</div><div class="bstat-value" style="color:${lrC}">${leftPx}px</div><div class="bstat-sub">${Math.round(leftPx/lrTotal*100)}% of H</div></div>
-    <div class="bstat"><div class="bstat-label">Right Border</div><div class="bstat-value" style="color:${lrC}">${rightPx}px</div><div class="bstat-sub">${Math.round(rightPx/lrTotal*100)}% of H</div></div>
-  `;
+  return{top:Math.round(bTop*H),bottom:Math.round((1-bBottom)*H),left:Math.round(bLeft*W),right:Math.round((1-bRight)*W),imgW:W,imgH:H};
 }
 
-function getMeasuredBorders(){
-  const img=document.getElementById('borderImg');
-  const W=img.naturalWidth||img.offsetWidth;
-  const H=img.naturalHeight||img.offsetHeight;
-  return{
-    top:Math.round(borders.top*H),
-    bottom:Math.round((1-borders.bottom)*H),
-    left:Math.round(borders.left*W),
-    right:Math.round((1-borders.right)*W),
-    imgW:W,imgH:H
-  };
-}
-
-// ── CROP TO CARD ──
-function getCroppedB64(){
-  return new Promise(resolve=>{
+// CROP
+function getCropped(){
+  return new Promise(res=>{
     const img=new Image();
     img.onload=()=>{
-      const W=img.naturalWidth, H=img.naturalHeight;
-      const x=Math.round(borders.left*W);
-      const y=Math.round(borders.top*H);
-      const w=Math.round((borders.right-borders.left)*W);
-      const h=Math.round((borders.bottom-borders.top)*H);
+      const W=img.naturalWidth,H=img.naturalHeight;
+      const x=Math.round(bLeft*W),y=Math.round(bTop*H);
+      const w=Math.round((bRight-bLeft)*W),h=Math.round((bBottom-bTop)*H);
       const c=document.createElement('canvas');
-      c.width=w; c.height=h;
+      c.width=w;c.height=h;
       c.getContext('2d').drawImage(img,x,y,w,h,0,0,w,h);
-      resolve(c.toDataURL('image/jpeg',0.92).split(',')[1]);
+      res(c.toDataURL('image/jpeg',.92).split(',')[1]);
     };
     img.src=imgSrc;
   });
 }
 
-// ── EMBOSS ──
-function getEmbossB64(b64){
-  return new Promise(resolve=>{
+// EMBOSS
+function getEmboss(b64){
+  return new Promise(res=>{
     const img=new Image();
     img.onload=()=>{
       const c=document.createElement('canvas');
-      c.width=img.naturalWidth; c.height=img.naturalHeight;
+      c.width=img.naturalWidth;c.height=img.naturalHeight;
       const ctx=c.getContext('2d');
       ctx.drawImage(img,0,0);
-      // Greyscale
       const id=ctx.getImageData(0,0,c.width,c.height);
       const d=id.data;
       for(let i=0;i<d.length;i+=4){const g=d[i]*.299+d[i+1]*.587+d[i+2]*.114;d[i]=d[i+1]=d[i+2]=g;}
       ctx.putImageData(id,0,0);
-      // Emboss
       const s=ctx.getImageData(0,0,c.width,c.height);
       const dst=ctx.createImageData(c.width,c.height);
-      const sw=s.data, dw=dst.data, W=c.width;
+      const sw=s.data,dw=dst.data,W=c.width;
       for(let y=1;y<c.height-1;y++)for(let x=1;x<W-1;x++){
-        const i=(y*W+x)*4, tl=((y-1)*W+(x-1))*4, br=((y+1)*W+(x+1))*4;
-        let v=Math.max(0,Math.min(255,sw[tl]-sw[br]+128));
-        dw[i]=dw[i+1]=dw[i+2]=v; dw[i+3]=255;
+        const i=(y*W+x)*4,tl=((y-1)*W+(x-1))*4,br=((y+1)*W+(x+1))*4;
+        const v=Math.max(0,Math.min(255,sw[tl]-sw[br]+128));
+        dw[i]=dw[i+1]=dw[i+2]=v;dw[i+3]=255;
       }
       ctx.putImageData(dst,0,0);
-      resolve(c.toDataURL('image/jpeg',0.88).split(',')[1]);
+      res(c.toDataURL('image/jpeg',.88).split(',')[1]);
     };
     img.src='data:image/jpeg;base64,'+b64;
   });
 }
 
-// ── LOADING ──
+// STEPS
 function startSteps(){
   ['s1','s2','s3','s4','s5'].forEach(s=>document.getElementById(s).classList.remove('active','done'));
   document.getElementById('s1').classList.add('active');
@@ -637,109 +506,77 @@ function startSteps(){
   },1300);
 }
 
-// ── HELPERS ──
+// HELPERS
 function sCol(s){if(s>=9)return'#34C759';if(s>=7)return'#FFD000';if(s>=5)return'#FF9500';return'#FF3B30';}
 function gLab(s){if(s>=10)return'Gem Mint';if(s>=9)return'Mint';if(s>=8)return'Near Mint–Mint';if(s>=7)return'Near Mint';if(s>=6)return'Excellent–Mint';if(s>=5)return'Excellent';if(s>=4)return'Very Good';if(s>=2)return'Good';return'Poor';}
-function ratioCol(a,b){const r=Math.max(a,b)/(a+b);if(r<=.52)return'#34C759';if(r<=.55)return'#FFD000';if(r<=.60)return'#FF9500';return'#FF3B30';}
 function dCol(t){if(t==='scratch'||t==='wear')return'#FF3B30';if(t==='print')return'#FF9500';if(t==='crease')return'#FFD000';if(t==='corner')return'#0A84FF';return'#8E8E93';}
 
-// ── ANALYZE ──
+// ANALYZE
 async function analyze(){
   if(!imgB64)return;
   document.getElementById('errorMsg').style.display='none';
   show('loading');startSteps();
-
+  const mb=getMeasured();
   const cardName=document.getElementById('cardName').value.trim();
-  const mb=getMeasuredBorders();
-  const tbTotal=mb.top+mb.bottom, lrTotal=mb.left+mb.right;
-  const tbRatio=`${Math.round(mb.top/tbTotal*100)}/${Math.round(mb.bottom/tbTotal*100)}`;
-  const lrRatio=`${Math.round(mb.left/lrTotal*100)}/${Math.round(mb.right/lrTotal*100)}`;
-
-  // Crop card and generate emboss
-  const [cropped, emboss] = await Promise.all([getCroppedB64(), getEmbossB64(imgB64)]);
-  croppedB64=cropped;
+  const tbT=mb.top+mb.bottom,lrT=mb.left+mb.right;
+  const [cropped,emboss]=await Promise.all([getCropped(),getEmboss(imgB64)]);
 
   const system=`You are a professional Pokémon TCG grading expert matching PSA/BGS/CGC standards.
 
-You will receive TWO images:
-1. The ORIGINAL card photo (cropped to card area only)
-2. An EMBOSSED/SURFACE SCAN version of the same card
+You receive TWO images: 1) original card photo cropped to card area, 2) embossed surface scan of same card.
 
-IMPORTANT RULES:
-- Only flag defects that are VISIBLE IN BOTH images. If something appears in only one image, it is likely a background artifact or lighting issue — IGNORE IT.
-- The user has manually measured the exact border widths. Use these measurements for centering — do NOT re-estimate.
-- Do NOT penalise for anything outside the card border area.
+CRITICAL RULES:
+- Only flag defects VISIBLE IN BOTH images. Single-image artifacts = background noise, ignore them.
+- Do NOT penalise anything outside the card border.
+- Use the EXACT measured borders below — do not re-estimate centering.
 
-MEASURED BORDERS (exact, user-confirmed):
-- Top: ${mb.top}px (${Math.round(mb.top/tbTotal*100)}%)
-- Bottom: ${mb.bottom}px (${Math.round(mb.bottom/tbTotal*100)}%)  
-- Left: ${mb.left}px (${Math.round(mb.left/lrTotal*100)}%)
-- Right: ${mb.right}px (${Math.round(mb.right/lrTotal*100)}%)
-- Top/Bottom ratio: ${tbRatio}
-- Left/Right ratio: ${lrRatio}
+EXACT MEASURED BORDERS:
+- Top: ${mb.top}px (${Math.round(mb.top/tbT*100)}%)
+- Bottom: ${mb.bottom}px (${Math.round(mb.bottom/tbT*100)}%)
+- Left: ${mb.left}px (${Math.round(mb.left/lrT*100)}%)
+- Right: ${mb.right}px (${Math.round(mb.right/lrT*100)}%)
+- Top/Bottom ratio: ${Math.round(mb.top/tbT*100)}/${Math.round(mb.bottom/tbT*100)}
+- Left/Right ratio: ${Math.round(mb.left/lrT*100)}/${Math.round(mb.right/lrT*100)}
 
 Return ONLY valid JSON, no markdown:
-{
-  "defects": [
-    {"type":"<scratch|wear|print|crease|corner>","x_pct":<0-100>,"y_pct":<0-100>,"description":"<short>","severity":"<minor|moderate|major>","confirmed_in_both":true}
-  ],
-  "centering": {"score":<1-10>,"descriptor":"<phrase>","notes":"<2-3 sentences>"},
-  "corners":   {"score":<1-10>,"descriptor":"<phrase>","notes":"<2-3 sentences>"},
-  "surface":   {"score":<1-10>,"descriptor":"<phrase>","notes":"<2-3 sentences>"},
-  "edges":     {"score":<1-10>,"descriptor":"<phrase>","notes":"<2-3 sentences>"},
-  "overall":   {"score":<1-10>,"label":"<grade>","summary":"<3-4 sentences>"}
-}
+{"defects":[{"type":"<scratch|wear|print|crease|corner>","x_pct":<0-100>,"y_pct":<0-100>,"description":"<short>","severity":"<minor|moderate|major>"}],"centering":{"score":<1-10>,"descriptor":"<phrase>","notes":"<2-3 sentences>"},"corners":{"score":<1-10>,"descriptor":"<phrase>","notes":"<2-3 sentences>"},"surface":{"score":<1-10>,"descriptor":"<phrase>","notes":"<2-3 sentences>"},"edges":{"score":<1-10>,"descriptor":"<phrase>","notes":"<2-3 sentences>"},"overall":{"score":<1-10>,"label":"<grade>","summary":"<3-4 sentences>"}}
 
-Only include defects where confirmed_in_both is true.
-Centering scale: 10=50/50, 9=55/45, 8=60/40, 7=65/35, 6=70/30, below=poor.`;
+Only include confirmed dual-scan defects. Centering: 10=50/50, 9=55/45, 8=60/40, 7=65/35.`;
 
   try{
-    const res=await fetch(WORKER,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',
-        max_tokens:1500,
-        system,
-        messages:[{role:'user',content:[
-          {type:'image',source:{type:'base64',media_type:'image/jpeg',data:cropped}},
-          {type:'image',source:{type:'base64',media_type:'image/jpeg',data:emboss}},
-          {type:'text',text:`Grade this Pokémon card${cardName?' ("'+cardName+'")':''}. The first image is the original, the second is the surface scan. Only flag defects visible in BOTH. Return ONLY JSON.`}
-        ]}]
-      })
-    });
+    const res=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1500,system,messages:[{role:'user',content:[
+      {type:'image',source:{type:'base64',media_type:'image/jpeg',data:cropped}},
+      {type:'image',source:{type:'base64',media_type:'image/jpeg',data:emboss}},
+      {type:'text',text:`Grade this card${cardName?' ("'+cardName+'")':''}. Image 1=original, Image 2=surface scan. Flag only defects in BOTH. Return ONLY JSON.`}
+    ]}]})});
     clearInterval(stepTimer);
     const data=await res.json();
     if(data.error)throw new Error(data.error.message);
     const raw=(data.content||[]).map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
-    const result=JSON.parse(raw);
-    renderResults(result,cardName,mb,emboss,cropped);
+    renderResults(JSON.parse(raw),cardName,mb,emboss,cropped);
     show('results');
   }catch(err){
-    clearInterval(stepTimer);
-    show('border');
+    clearInterval(stepTimer);show('border');
     const eb=document.getElementById('errorMsg');
     eb.style.display='block';
-    eb.textContent='⚠ '+(err.message||'Something went wrong. Please try again.');
+    eb.textContent='⚠ '+(err.message||'Something went wrong. Try again.');
   }
 }
 
-// ── RENDER ──
+// RENDER
 function renderResults(r,cardName,mb,embossB64,origB64){
-  const ov=r.overall.score, col=sCol(ov);
+  const ov=r.overall.score,col=sCol(ov);
   document.getElementById('gcn').textContent=(cardName||'Pokémon Card').toUpperCase();
   document.getElementById('glt').textContent=r.overall.label||gLab(ov);
   document.getElementById('gs').textContent=ov.toFixed(1);
   document.getElementById('gs').style.color=col;
   document.getElementById('gradeHero').style.borderLeftColor=col;
 
-  // Border ratio pills
-  const tbTotal=mb.top+mb.bottom, lrTotal=mb.left+mb.right;
-  const tbC=ratioCol(mb.top,mb.bottom), lrC=ratioCol(mb.left,mb.right);
+  const tbT=mb.top+mb.bottom,lrT=mb.left+mb.right;
+  const tc=ratioCol(mb.top,mb.bottom),lc=ratioCol(mb.left,mb.right);
   document.getElementById('bdg').innerHTML=`
-    <div class="brp"><div class="brpl">Top / Bottom</div><div class="brpv" style="color:${tbC}">${Math.round(mb.top/tbTotal*100)}/${Math.round(mb.bottom/tbTotal*100)}</div><div class="brps">${mb.top}px — ${mb.bottom}px</div></div>
-    <div class="brp"><div class="brpl">Left / Right</div><div class="brpv" style="color:${lrC}">${Math.round(mb.left/lrTotal*100)}/${Math.round(mb.right/lrTotal*100)}</div><div class="brps">${mb.left}px — ${mb.right}px</div></div>
-  `;
+    <div class="brp"><div class="brpl">Top / Bottom</div><div class="brpv" style="color:${tc}">${Math.round(mb.top/tbT*100)}/${Math.round(mb.bottom/tbT*100)}</div><div class="brps">${mb.top}px — ${mb.bottom}px</div></div>
+    <div class="brp"><div class="brpl">Left / Right</div><div class="brpv" style="color:${lc}">${Math.round(mb.left/lrT*100)}/${Math.round(mb.right/lrT*100)}</div><div class="brps">${mb.left}px — ${mb.right}px</div></div>`;
   const worst=Math.max(Math.max(mb.top,mb.bottom)/Math.min(mb.top,mb.bottom),Math.max(mb.left,mb.right)/Math.min(mb.left,mb.right));
   let vc,vt;
   if(worst<=1.1){vc='#34C759';vt='Excellent centering — near perfect 50/50';}
@@ -747,69 +584,96 @@ function renderResults(r,cardName,mb,embossB64,origB64){
   else if(worst<=1.5){vc='#FF9500';vt='Moderate centering issue — visible difference';}
   else{vc='#FF3B30';vt='Poor centering — significant imbalance';}
   const cv=document.getElementById('cverd');
-  cv.innerHTML=`<div class="vdot" style="background:${vc}"></div><span style="color:${vc}">${vt}</span>`;
+  cv.innerHTML=`<div class="vd" style="background:${vc}"></div><span style="color:${vc}">${vt}</span>`;
   cv.style.background=vc+'18';
 
-  // Defect imaging
   setTimeout(()=>renderDefects(r.defects||[],embossB64,origB64),100);
 
-  // Score rows
   const cats=[{k:'centering',l:'Centering',i:'🎯'},{k:'corners',l:'Corners',i:'📐'},{k:'surface',l:'Surface',i:'🔍'},{k:'edges',l:'Edges',i:'📏'}];
   document.getElementById('scoreRows').innerHTML=cats.map((c,idx)=>{
     const d=r[c.k],col=sCol(d.score);
-    return`<div class="score-row" style="animation-delay:${idx*.07}s">
-      <div class="srt"><div class="srl"><span class="sicon">${c.i}</span><div><div class="scn">${c.l}</div><div class="scd">${d.descriptor}</div></div></div>
-      <div class="snb" style="color:${col}">${d.score.toFixed(1)}</div></div>
-      <div class="bt"><div class="bf" style="width:${d.score/10*100}%;background:${col}"></div></div>
-    </div>`;
+    return`<div class="sr" style="animation-delay:${idx*.07}s"><div class="srt"><div class="srl"><span class="si">${c.i}</span><div><div class="scn">${c.l}</div><div class="scd">${d.descriptor}</div></div></div><div class="snb" style="color:${col}">${d.score.toFixed(1)}</div></div><div class="bt"><div class="bf" style="width:${d.score/10*100}%;background:${col}"></div></div></div>`;
   }).join('');
-
-  document.getElementById('analysisCards').innerHTML=[
-    ...cats.map(c=>({i:c.i,l:c.l,t:r[c.k].notes})),
-    {i:'⭐',l:'Overall Assessment',t:r.overall.summary}
-  ].map(c=>`<div class="acard"><div class="acat">${c.i} ${c.l}</div><div class="atxt">${c.t}</div></div>`).join('');
+  document.getElementById('analysisCards').innerHTML=[...cats.map(c=>({i:c.i,l:c.l,t:r[c.k].notes})),{i:'⭐',l:'Overall Assessment',t:r.overall.summary}].map(c=>`<div class="ac"><div class="acat">${c.i} ${c.l}</div><div class="atxt">${c.t}</div></div>`).join('');
 }
 
 function renderDefects(defects,embossB64,origB64){
-  // Emboss canvas
   const ec=document.getElementById('embossC');
-  const eImg=new Image();
-  eImg.onload=()=>{ec.width=eImg.naturalWidth;ec.height=eImg.naturalHeight;ec.getContext('2d').drawImage(eImg,0,0);};
-  eImg.src='data:image/jpeg;base64,'+embossB64;
-
-  // Defect map canvas
+  const ei=new Image();ei.onload=()=>{ec.width=ei.naturalWidth;ec.height=ei.naturalHeight;ec.getContext('2d').drawImage(ei,0,0);};
+  ei.src='data:image/jpeg;base64,'+embossB64;
   const dc=document.getElementById('defectC');
-  const dImg=new Image();
-  dImg.onload=()=>{
-    dc.width=dImg.naturalWidth;dc.height=dImg.naturalHeight;
+  const di=new Image();
+  di.onload=()=>{
+    dc.width=di.naturalWidth;dc.height=di.naturalHeight;
     const ctx=dc.getContext('2d');
-    ctx.filter='grayscale(100%) brightness(0.55)';
-    ctx.drawImage(dImg,0,0);
-    ctx.filter='none';
+    ctx.filter='grayscale(100%) brightness(0.55)';ctx.drawImage(di,0,0);ctx.filter='none';
     defects.forEach(d=>{
-      const x=(d.x_pct/100)*dc.width, y=(d.y_pct/100)*dc.height;
-      const col=dCol(d.type), r=Math.max(18,dc.width*.035);
-      ctx.beginPath();ctx.arc(x,y,r*1.7,0,Math.PI*2);
-      ctx.fillStyle=col+'20';ctx.fill();
-      ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);
-      ctx.strokeStyle=col;ctx.lineWidth=3;ctx.stroke();
-      ctx.beginPath();ctx.arc(x,y,r*.22,0,Math.PI*2);
-      ctx.fillStyle=col;ctx.fill();
+      const x=(d.x_pct/100)*dc.width,y=(d.y_pct/100)*dc.height,col=dCol(d.type),r=Math.max(18,dc.width*.035);
+      ctx.beginPath();ctx.arc(x,y,r*1.7,0,Math.PI*2);ctx.fillStyle=col+'20';ctx.fill();
+      ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.strokeStyle=col;ctx.lineWidth=3;ctx.stroke();
+      ctx.beginPath();ctx.arc(x,y,r*.22,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();
     });
   };
-  dImg.src='data:image/jpeg;base64,'+origB64;
-
+  di.src='data:image/jpeg;base64,'+origB64;
   const dl=document.getElementById('deflist');
-  if(!defects.length){
-    dl.innerHTML=`<div class="dfi"><div class="dfid" style="background:#34C759"></div><span style="color:#34C759">No defects confirmed in both scans</span></div>`;
-  }else{
-    dl.innerHTML=defects.map(d=>{
-      const col=dCol(d.type);
-      return`<div class="dfi"><div class="dfid" style="background:${col}"></div>
-        <div><div style="font-family:var(--fd);font-size:12px;color:${col};text-transform:uppercase;letter-spacing:.5px">${d.type} — ${d.severity}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px">${d.description}</div></div></div>`;
-    }).join('');
-  }
+  dl.innerHTML=defects.length?defects.map(d=>{const col=dCol(d.type);return`<div class="dfi"><div class="dfid" style="background:${col}"></div><div><div style="font-family:var(--fd);font-size:12px;color:${col};text-transform:uppercase;letter-spacing:.5px">${d.type} — ${d.severity}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${d.description}</div></div></div>`;}).join(''):`<div class="dfi"><div class="dfid" style="background:#34C759"></div><span style="color:#34C759">No defects confirmed in both scans</span></div>`;
+}
+
+// CAMERA
+async function openCamera(){
+  document.getElementById('camOverlay').classList.add('open');holdFrames=0;
+  try{
+    camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1920},height:{ideal:1080}}});
+    document.getElementById('vidFeed').srcObject=camStream;
+    startChecks();
+  }catch(e){document.getElementById('camOverlay').classList.remove('open');alert('Camera denied. Use Upload from Library.');}
+}
+function closeCamera(){
+  if(camStream)camStream.getTracks().forEach(t=>t.stop());camStream=null;
+  if(alignTimer)clearInterval(alignTimer);
+  document.getElementById('camOverlay').classList.remove('open');holdFrames=0;
+}
+function startChecks(){
+  const video=document.getElementById('vidFeed');
+  const prog=document.getElementById('camProg');
+  const badge=document.getElementById('camBadge');
+  const border=document.getElementById('camBorder');
+  alignTimer=setInterval(()=>{
+    if(!video.videoWidth)return;
+    const tmp=document.createElement('canvas');tmp.width=80;tmp.height=112;
+    const ctx=tmp.getContext('2d');ctx.drawImage(video,0,0,80,112);
+    const px=ctx.getImageData(0,0,80,112).data;
+    let cb=0;
+    for(let y=28;y<84;y++)for(let x=16;x<64;x++){const i=(y*80+x)*4,b=(px[i]+px[i+1]+px[i+2])/3;if(b>80&&b<245)cb++;}
+    const centerOk=cb/(56*48)>0.6;
+    let sum=0,cnt=0;
+    for(let y=20;y<92;y++)for(let x=12;x<68;x++){const i=(y*80+x)*4;sum+=(px[i]+px[i+1]+px[i+2])/3;cnt++;}
+    const avg=sum/cnt;const lightOk=avg>55&&avg<210;
+    let ls=0,rs=0,half=0;
+    for(let y=20;y<92;y++)for(let x=12;x<40;x++){const i=(y*80+x)*4;ls+=(px[i]+px[i+1]+px[i+2])/3;half++;}
+    for(let y=20;y<92;y++)for(let x=40;x<68;x++){const i=(y*80+x)*4;rs+=(px[i]+px[i+1]+px[i+2])/3;}
+    const levelOk=Math.abs(ls-rs)/half<30;
+    setChk('chk-center',centerOk);setChk('chk-light',lightOk);setChk('chk-level',levelOk);
+    const score=(centerOk?33:0)+(lightOk?33:0)+(levelOk?34:0);
+    const perim=2*(96+136);
+    prog.style.strokeDasharray=perim;prog.style.strokeDashoffset=perim*(1-score/100);
+    const col=score===100?'#34C759':score>50?'#FFD000':'#FF3B30';
+    prog.style.stroke=col;border.style.borderColor=col;
+    if(score===100){
+      holdFrames++;
+      badge.textContent=`HOLD STEADY ${holdFrames}/12`;badge.style.color='#34C759';
+      if(holdFrames>=12){clearInterval(alignTimer);doCapture();}
+    }else{holdFrames=0;badge.textContent=score>50?'ALMOST THERE':'ALIGN CARD';badge.style.color=score>50?'#FFD000':'rgba(255,255,255,.4)';}
+  },120);
+}
+function setChk(id,pass){const el=document.getElementById(id);el.classList.toggle('pass',pass);el.classList.toggle('fail',!pass);}
+function doCapture(){
+  const f=document.getElementById('camFlash');f.classList.add('on');setTimeout(()=>f.classList.remove('on'),120);
+  const v=document.getElementById('vidFeed'),c=document.getElementById('snapCanvas');
+  c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);
+  const url=c.toDataURL('image/jpeg',.93);
+  imgB64=url.split(',')[1];imgSrc=url;mediaType='image/jpeg';
+  setTimeout(()=>{closeCamera();loadBorderTool();},180);
 }
 </script>
 </body>
