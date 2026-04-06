@@ -6,93 +6,209 @@
 <title>PokeGrade</title>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 :root {
-  --yellow: #FFD000; --red: #FF3B30; --green: #34C759;
-  --orange: #FF9500; --bg: #0C0C0E; --card: #1C1C1E;
-  --card2: #2C2C2E; --border: #38383A; --text: #FFFFFF; --muted: #8E8E93;
-  --font-display: 'Archivo Black', sans-serif; --font-body: 'Archivo', sans-serif;
+  --yellow:#FFD000; --red:#FF3B30; --green:#34C759; --orange:#FF9500;
+  --bg:#0C0C0E; --card:#1C1C1E; --card2:#2C2C2E; --border:#38383A;
+  --text:#FFFFFF; --muted:#8E8E93;
+  --font-display:'Archivo Black',sans-serif; --font-body:'Archivo',sans-serif;
 }
-body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; max-width: 480px; margin: 0 auto; }
-.header { padding: 56px 24px 24px; display: flex; align-items: center; justify-content: space-between; }
-.logo { font-family: var(--font-display); font-size: 28px; letter-spacing: -0.5px; }
-.logo span { color: var(--yellow); }
-.pill { background: var(--yellow); color: #000; font-family: var(--font-display); font-size: 10px; letter-spacing: 1px; padding: 5px 10px; border-radius: 20px; }
-.screen { display: none; padding: 0 20px 40px; animation: fadeIn 0.3s ease; }
-.screen.active { display: block; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-.hero-text { font-family: var(--font-display); font-size: 38px; line-height: 1.1; letter-spacing: -1px; margin-bottom: 12px; }
-.hero-text span { color: var(--yellow); }
-.hero-sub { color: var(--muted); font-size: 15px; font-weight: 300; line-height: 1.5; margin-bottom: 36px; }
-.btn-primary { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 18px; background: var(--yellow); color: #000; font-family: var(--font-display); font-size: 16px; border: none; border-radius: 16px; cursor: pointer; margin-bottom: 12px; transition: transform 0.15s, opacity 0.15s; }
-.btn-primary:active { transform: scale(0.97); opacity: 0.9; }
-.btn-secondary { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 18px; background: var(--card); color: var(--text); font-family: var(--font-display); font-size: 16px; border: 1.5px solid var(--border); border-radius: 16px; cursor: pointer; margin-bottom: 12px; transition: transform 0.15s; }
-.btn-secondary:active { transform: scale(0.97); }
-.btn-ghost { display: flex; align-items: center; justify-content: center; width: 100%; padding: 14px; background: transparent; color: var(--muted); font-family: var(--font-body); font-size: 14px; border: none; cursor: pointer; }
-.features { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.feature-chip { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
-.feature-chip .icon { font-size: 22px; margin-bottom: 6px; }
-.feature-chip .label { font-family: var(--font-display); font-size: 13px; line-height: 1.2; }
-.feature-chip .desc { color: var(--muted); font-size: 11px; margin-top: 3px; font-weight: 300; }
-#cameraOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 999; flex-direction: column; }
-#cameraOverlay.open { display: flex; }
-#videoFeed { flex: 1; width: 100%; object-fit: cover; }
-.cam-guide { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%); width: 65%; aspect-ratio: 2.5/3.5; border: 2px solid rgba(255,208,0,0.7); border-radius: 12px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.45); }
-.cam-guide::before, .cam-guide::after { content: ''; position: absolute; width: 20px; height: 20px; border-color: var(--yellow); border-style: solid; }
-.cam-guide::before { top:-2px; left:-2px; border-width:3px 0 0 3px; border-radius:4px 0 0 0; }
-.cam-guide::after  { bottom:-2px; right:-2px; border-width:0 3px 3px 0; border-radius:0 0 4px 0; }
-.cam-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%, calc(-60% - 120px)); color: rgba(255,255,255,0.8); font-size: 13px; letter-spacing: 1px; text-align: center; font-family: var(--font-display); }
-.cam-controls { padding: 24px 24px 48px; display: flex; align-items: center; justify-content: space-between; background: linear-gradient(transparent, #000); }
-.shutter { width: 72px; height: 72px; border-radius: 50%; background: #fff; border: 4px solid rgba(255,255,255,0.3); cursor: pointer; transition: transform 0.1s; flex-shrink: 0; }
-.shutter:active { transform: scale(0.92); }
-.cam-cancel { color: #fff; background: transparent; border: none; font-family: var(--font-body); font-size: 16px; cursor: pointer; padding: 12px; opacity: 0.8; }
-.cam-tip { color: rgba(255,255,255,0.5); font-size: 12px; text-align: center; width: 72px; }
-#snapCanvas { display: none; }
-.preview-img-wrap { position: relative; background: var(--card); border-radius: 20px; overflow: hidden; margin-bottom: 20px; aspect-ratio: 3/4; }
-.preview-img-wrap img { width: 100%; height: 100%; object-fit: contain; }
-.retake-btn { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); color: #fff; border: none; border-radius: 20px; padding: 6px 14px; font-size: 13px; cursor: pointer; backdrop-filter: blur(8px); }
-.input-group { margin-bottom: 16px; }
-.input-label { font-size: 12px; color: var(--muted); letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 500; text-transform: uppercase; }
-.text-input { width: 100%; background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 16px; color: var(--text); font-family: var(--font-body); font-size: 16px; outline: none; transition: border-color 0.2s; }
-.text-input:focus { border-color: var(--yellow); }
-.text-input::placeholder { color: var(--muted); }
-.error-msg { background: rgba(255,59,48,0.12); border: 1px solid rgba(255,59,48,0.3); border-radius: 12px; padding: 14px 16px; color: #FF6B6B; font-size: 13px; margin-bottom: 16px; display: none; line-height: 1.5; }
-.loading-wrap { padding: 60px 0; display: flex; flex-direction: column; align-items: center; gap: 24px; }
-.pokeball { width: 72px; height: 72px; border-radius: 50%; border: 4px solid var(--border); position: relative; animation: spin 1s linear infinite; overflow: hidden; }
-.pokeball::before { content: ''; position: absolute; top:0; left:0; right:0; height:50%; background: var(--red); }
-.pokeball::after { content: ''; position: absolute; top:50%; left:50%; transform: translate(-50%,-50%); width:16px; height:16px; border-radius: 50%; background: var(--bg); border: 3px solid var(--border); z-index:1; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.load-title { font-family: var(--font-display); font-size: 20px; text-align: center; }
-.load-steps { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
-.load-step { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--card); border-radius: 12px; font-size: 14px; color: var(--muted); transition: all 0.4s; border: 1px solid transparent; }
-.load-step.done { color: var(--text); }
-.load-step.done .step-dot { background: var(--green); }
-.load-step.active { color: var(--text); border-color: var(--yellow); }
-.load-step.active .step-dot { background: var(--yellow); animation: pulse 0.8s infinite; }
-.step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
-@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
-.grade-hero { background: var(--card); border-radius: 24px; padding: 28px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid var(--yellow); }
-.grade-card-name { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-.grade-label-text { font-family: var(--font-display); font-size: 22px; line-height: 1.1; margin-bottom: 4px; }
-.grade-sublabel { font-size: 13px; color: var(--muted); font-weight: 300; }
-.grade-score-wrap { text-align: right; }
-.grade-score { font-family: var(--font-display); font-size: 64px; line-height: 1; letter-spacing: -2px; }
-.grade-score-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-.section-title { font-family: var(--font-display); font-size: 13px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin: 24px 0 12px; }
-.score-row { background: var(--card); border-radius: 16px; padding: 16px 18px; margin-bottom: 10px; animation: fadeIn 0.4s ease both; }
-.score-row-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.score-row-left { display: flex; align-items: center; gap: 10px; }
-.score-icon { font-size: 20px; }
-.score-cat-name { font-family: var(--font-display); font-size: 15px; }
-.score-descriptor { font-size: 12px; color: var(--muted); margin-top: 1px; font-weight: 300; }
-.score-num-badge { font-family: var(--font-display); font-size: 20px; min-width: 40px; text-align: right; }
-.bar-track { height: 6px; background: var(--card2); border-radius: 3px; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 3px; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); }
-.analysis-card { background: var(--card); border-radius: 16px; padding: 20px; margin-bottom: 10px; }
-.analysis-cat { font-family: var(--font-display); font-size: 13px; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-.analysis-text { font-size: 14px; line-height: 1.65; color: #C7C7CC; font-weight: 300; }
-.divider { height: 1px; background: var(--border); margin: 24px 0; }
-input[type="file"] { display: none; }
+body { background:var(--bg); color:var(--text); font-family:var(--font-body); min-height:100vh; max-width:480px; margin:0 auto; }
+
+/* HEADER */
+.header { padding:56px 24px 24px; display:flex; align-items:center; justify-content:space-between; }
+.logo { font-family:var(--font-display); font-size:28px; letter-spacing:-0.5px; }
+.logo span { color:var(--yellow); }
+.pill { background:var(--yellow); color:#000; font-family:var(--font-display); font-size:10px; letter-spacing:1px; padding:5px 10px; border-radius:20px; }
+
+/* SCREENS */
+.screen { display:none; padding:0 20px 40px; animation:fadeIn 0.3s ease; }
+.screen.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+/* HOME BUTTON */
+.home-btn { display:flex; align-items:center; gap:6px; background:transparent; border:none; color:var(--muted); font-family:var(--font-body); font-size:14px; cursor:pointer; padding:0 0 20px; }
+.home-btn:active { color:var(--text); }
+
+/* BUTTONS */
+.btn-primary { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:18px; background:var(--yellow); color:#000; font-family:var(--font-display); font-size:16px; border:none; border-radius:16px; cursor:pointer; margin-bottom:12px; transition:transform 0.15s,opacity 0.15s; }
+.btn-primary:active { transform:scale(0.97); opacity:0.9; }
+.btn-secondary { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:18px; background:var(--card); color:var(--text); font-family:var(--font-display); font-size:16px; border:1.5px solid var(--border); border-radius:16px; cursor:pointer; margin-bottom:12px; transition:transform 0.15s; }
+.btn-secondary:active { transform:scale(0.97); }
+.btn-ghost { display:flex; align-items:center; justify-content:center; width:100%; padding:14px; background:transparent; color:var(--muted); font-family:var(--font-body); font-size:14px; border:none; cursor:pointer; }
+
+/* FEATURES */
+.features { margin-top:40px; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.feature-chip { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px; }
+.feature-chip .icon { font-size:22px; margin-bottom:6px; }
+.feature-chip .label { font-family:var(--font-display); font-size:13px; line-height:1.2; }
+.feature-chip .desc { color:var(--muted); font-size:11px; margin-top:3px; font-weight:300; }
+
+/* CAMERA OVERLAY */
+#cameraOverlay { display:none; position:fixed; inset:0; background:#000; z-index:999; flex-direction:column; align-items:center; justify-content:center; }
+#cameraOverlay.open { display:flex; }
+#videoFeed { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+#snapCanvas { display:none; }
+
+.cam-ui { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+
+/* alignment ring */
+.align-ring-wrap {
+  position:relative;
+  width:72vw;
+  aspect-ratio:2.5/3.5;
+  margin-bottom:0;
+}
+.align-card-guide {
+  position:absolute; inset:0;
+  border:2px solid rgba(255,255,255,0.3);
+  border-radius:12px;
+  transition:border-color 0.3s;
+}
+.align-progress-svg {
+  position:absolute; inset:-8px;
+  width:calc(100% + 16px);
+  height:calc(100% + 16px);
+  pointer-events:none;
+}
+.progress-rect {
+  fill:none;
+  stroke:#FFD000;
+  stroke-width:4;
+  stroke-dasharray:1000;
+  stroke-dashoffset:1000;
+  rx:16; ry:16;
+  transition:stroke-dashoffset 0.2s ease, stroke 0.3s;
+}
+.cam-instruction {
+  position:absolute;
+  bottom:-36px;
+  left:50%; transform:translateX(-50%);
+  white-space:nowrap;
+  font-family:var(--font-display);
+  font-size:13px;
+  letter-spacing:1px;
+  color:rgba(255,255,255,0.7);
+  text-align:center;
+}
+.cam-score-badge {
+  position:absolute;
+  top:-36px;
+  left:50%; transform:translateX(-50%);
+  font-family:var(--font-display);
+  font-size:13px;
+  color:rgba(255,255,255,0.5);
+  letter-spacing:1px;
+}
+
+/* corner guides */
+.corner { position:absolute; width:20px; height:20px; border-color:var(--yellow); border-style:solid; transition:opacity 0.3s; }
+.corner.tl { top:-2px; left:-2px; border-width:3px 0 0 3px; border-radius:4px 0 0 0; }
+.corner.tr { top:-2px; right:-2px; border-width:3px 3px 0 0; border-radius:0 4px 0 0; }
+.corner.bl { bottom:-2px; left:-2px; border-width:0 0 3px 3px; border-radius:0 0 0 4px; }
+.corner.br { bottom:-2px; right:-2px; border-width:0 3px 3px 0; border-radius:0 0 4px 0; }
+
+/* flash effect */
+.cam-flash { position:fixed; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:9999; transition:opacity 0.1s; }
+.cam-flash.flash { opacity:1; }
+
+.cam-cancel-btn {
+  position:absolute; top:48px; left:20px;
+  color:#fff; background:rgba(0,0,0,0.5); border:none;
+  border-radius:20px; padding:8px 16px;
+  font-family:var(--font-body); font-size:14px; cursor:pointer;
+  backdrop-filter:blur(8px);
+}
+
+/* PREVIEW */
+.preview-img-wrap { position:relative; background:var(--card); border-radius:20px; overflow:hidden; margin-bottom:20px; aspect-ratio:3/4; }
+.preview-img-wrap img { width:100%; height:100%; object-fit:contain; }
+.retake-btn { position:absolute; top:12px; right:12px; background:rgba(0,0,0,0.6); color:#fff; border:none; border-radius:20px; padding:6px 14px; font-size:13px; cursor:pointer; backdrop-filter:blur(8px); }
+
+/* INPUTS */
+.input-group { margin-bottom:16px; }
+.input-label { font-size:12px; color:var(--muted); letter-spacing:0.5px; margin-bottom:8px; font-weight:500; text-transform:uppercase; }
+.text-input { width:100%; background:var(--card); border:1.5px solid var(--border); border-radius:12px; padding:14px 16px; color:var(--text); font-family:var(--font-body); font-size:16px; outline:none; transition:border-color 0.2s; }
+.text-input:focus { border-color:var(--yellow); }
+.text-input::placeholder { color:var(--muted); }
+.error-msg { background:rgba(255,59,48,0.12); border:1px solid rgba(255,59,48,0.3); border-radius:12px; padding:14px 16px; color:#FF6B6B; font-size:13px; margin-bottom:16px; display:none; line-height:1.5; }
+
+/* LOADING */
+.loading-wrap { padding:60px 0; display:flex; flex-direction:column; align-items:center; gap:24px; }
+.pokeball { width:72px; height:72px; border-radius:50%; border:4px solid var(--border); position:relative; animation:spin 1s linear infinite; overflow:hidden; }
+.pokeball::before { content:''; position:absolute; top:0; left:0; right:0; height:50%; background:var(--red); }
+.pokeball::after { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:16px; height:16px; border-radius:50%; background:var(--bg); border:3px solid var(--border); z-index:1; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.load-title { font-family:var(--font-display); font-size:20px; text-align:center; }
+.load-steps { width:100%; display:flex; flex-direction:column; gap:10px; margin-top:8px; }
+.load-step { display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--card); border-radius:12px; font-size:14px; color:var(--muted); transition:all 0.4s; border:1px solid transparent; }
+.load-step.done { color:var(--text); }
+.load-step.done .step-dot { background:var(--green); }
+.load-step.active { color:var(--text); border-color:var(--yellow); }
+.load-step.active .step-dot { background:var(--yellow); animation:pulse 0.8s infinite; }
+.step-dot { width:8px; height:8px; border-radius:50%; background:var(--border); flex-shrink:0; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* RESULTS */
+.grade-hero { background:var(--card); border-radius:24px; padding:28px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; border-left:4px solid var(--yellow); }
+.grade-card-name { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+.grade-label-text { font-family:var(--font-display); font-size:22px; line-height:1.1; margin-bottom:4px; }
+.grade-sublabel { font-size:13px; color:var(--muted); font-weight:300; }
+.grade-score-wrap { text-align:right; }
+.grade-score { font-family:var(--font-display); font-size:64px; line-height:1; letter-spacing:-2px; }
+.grade-score-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+.section-title { font-family:var(--font-display); font-size:13px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin:24px 0 12px; }
+
+/* BORDER MEASUREMENT */
+.border-measure-card { background:var(--card); border-radius:20px; padding:20px; margin-bottom:10px; }
+.border-diagram { position:relative; width:100%; aspect-ratio:2.5/3.5; max-height:280px; background:var(--card2); border-radius:12px; margin-bottom:16px; overflow:hidden; }
+.bd-outer { position:absolute; inset:0; border:2px solid var(--border); border-radius:8px; }
+.bd-inner { position:absolute; border:1.5px dashed rgba(255,255,255,0.15); border-radius:4px; display:flex; align-items:center; justify-content:center; }
+.bd-inner-label { font-family:var(--font-display); font-size:9px; color:rgba(255,255,255,0.2); letter-spacing:1px; text-align:center; }
+.bd-label { position:absolute; font-family:var(--font-display); font-size:10px; background:rgba(0,0,0,0.75); padding:2px 6px; border-radius:4px; white-space:nowrap; }
+.bd-line { position:absolute; opacity:0.7; }
+
+.ratio-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+.ratio-pill { background:var(--card2); border-radius:10px; padding:10px 12px; }
+.ratio-pill-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:4px; }
+.ratio-pill-value { font-family:var(--font-display); font-size:16px; }
+.ratio-pill-sub { font-size:11px; color:var(--muted); margin-top:2px; }
+.centering-verdict { display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:10px; font-size:13px; font-weight:500; }
+.verdict-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+/* SCORE ROWS */
+.score-row { background:var(--card); border-radius:16px; padding:16px 18px; margin-bottom:10px; animation:fadeIn 0.4s ease both; }
+.score-row-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.score-row-left { display:flex; align-items:center; gap:10px; }
+.score-icon { font-size:20px; }
+.score-cat-name { font-family:var(--font-display); font-size:15px; }
+.score-descriptor { font-size:12px; color:var(--muted); margin-top:1px; font-weight:300; }
+.score-num-badge { font-family:var(--font-display); font-size:20px; min-width:40px; text-align:right; }
+.bar-track { height:6px; background:var(--card2); border-radius:3px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:3px; transition:width 1.2s cubic-bezier(0.4,0,0.2,1); }
+
+/* TAG DEFECT SECTION */
+.defect-card { background:var(--card); border-radius:20px; padding:20px; margin-bottom:10px; }
+.defect-images { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.defect-img-wrap { position:relative; border-radius:10px; overflow:hidden; background:#000; aspect-ratio:2.5/3.5; }
+.defect-img-wrap canvas { width:100%; height:100%; display:block; }
+.defect-img-label { position:absolute; bottom:6px; left:50%; transform:translateX(-50%); font-family:var(--font-display); font-size:9px; letter-spacing:1px; background:rgba(0,0,0,0.7); color:#fff; padding:2px 8px; border-radius:4px; white-space:nowrap; }
+.defect-marker { position:absolute; transform:translate(-50%,-50%); }
+.defect-dot { width:14px; height:14px; border-radius:50%; border:2px solid; display:flex; align-items:center; justify-content:center; }
+.defect-dot::after { content:''; width:4px; height:4px; border-radius:50%; background:currentColor; }
+.defect-legend { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+.legend-item { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--muted); }
+.legend-dot { width:8px; height:8px; border-radius:50%; }
+.defect-list { display:flex; flex-direction:column; gap:6px; }
+.defect-item { display:flex; align-items:flex-start; gap:10px; padding:10px 12px; background:var(--card2); border-radius:10px; font-size:13px; }
+.defect-item-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:3px; }
+
+/* ANALYSIS */
+.analysis-card { background:var(--card); border-radius:16px; padding:20px; margin-bottom:10px; }
+.analysis-cat { font-family:var(--font-display); font-size:13px; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px; }
+.analysis-text { font-size:14px; line-height:1.65; color:#C7C7CC; font-weight:300; }
+.divider { height:1px; background:var(--border); margin:24px 0; }
+input[type="file"] { display:none; }
 </style>
 </head>
 <body>
@@ -102,24 +218,27 @@ input[type="file"] { display: none; }
   <div class="pill">AI GRADER</div>
 </div>
 
+<!-- UPLOAD -->
 <div class="screen active" id="screen-upload">
-  <div class="hero-text">Grade your<br><span>Pokémon</span><br>cards.</div>
-  <div class="hero-sub">AI-powered grading using professional TCG standards. Get a PSA-style score instantly.</div>
-  <button class="btn-primary" onclick="openCamera()"><span style="font-size:20px">📷</span> Take a Photo</button>
+  <div style="font-family:var(--font-display);font-size:38px;line-height:1.1;letter-spacing:-1px;margin-bottom:12px;">Grade your<br><span style="color:var(--yellow)">Pokémon</span><br>cards.</div>
+  <div style="color:var(--muted);font-size:15px;font-weight:300;line-height:1.5;margin-bottom:36px;">AI-powered grading with pixel border analysis, surface defect imaging & PSA-style scoring.</div>
+  <button class="btn-primary" onclick="openCamera()"><span style="font-size:20px">📷</span> Auto-Scan Card</button>
   <button class="btn-secondary" onclick="document.getElementById('fileInput').click()"><span style="font-size:20px">🖼️</span> Upload from Library</button>
   <input type="file" id="fileInput" accept="image/*" onchange="handleFile(this.files[0])">
   <div class="features">
-    <div class="feature-chip"><div class="icon">🎯</div><div class="label">Centering Analysis</div><div class="desc">Border ratios measured</div></div>
-    <div class="feature-chip"><div class="icon">📐</div><div class="label">Corner & Edge</div><div class="desc">Wear detection</div></div>
-    <div class="feature-chip"><div class="icon">🔍</div><div class="label">Surface Scan</div><div class="desc">Scratches & defects</div></div>
-    <div class="feature-chip"><div class="icon">⭐</div><div class="label">PSA-Style Score</div><div class="desc">1–10 final grade</div></div>
+    <div class="feature-chip"><div class="icon">🎯</div><div class="label">Auto Capture</div><div class="desc">Centre & snap</div></div>
+    <div class="feature-chip"><div class="icon">📐</div><div class="label">Border Pixels</div><div class="desc">Exact px + ratios</div></div>
+    <div class="feature-chip"><div class="icon">🔍</div><div class="label">Defect Imaging</div><div class="desc">TAG-style scan</div></div>
+    <div class="feature-chip"><div class="icon">⭐</div><div class="label">PSA Score</div><div class="desc">1–10 grade</div></div>
   </div>
 </div>
 
+<!-- PREVIEW -->
 <div class="screen" id="screen-preview">
+  <button class="home-btn" onclick="goHome()">← Home</button>
   <div class="preview-img-wrap">
     <img id="previewImg" src="" alt="Card">
-    <button class="retake-btn" onclick="goBack()">✕ Retake</button>
+    <button class="retake-btn" onclick="goHome()">✕ Retake</button>
   </div>
   <div class="input-group">
     <div class="input-label">Card Name (optional)</div>
@@ -127,25 +246,30 @@ input[type="file"] { display: none; }
   </div>
   <div class="error-msg" id="errorMsg"></div>
   <button class="btn-primary" onclick="analyze()"><span style="font-size:18px">⚡</span> Analyze Card</button>
-  <button class="btn-ghost" onclick="goBack()">← Choose Different Photo</button>
+  <button class="btn-ghost" onclick="goHome()">← Choose Different Photo</button>
 </div>
 
+<!-- LOADING -->
 <div class="screen" id="screen-loading">
   <div class="loading-wrap">
     <div class="pokeball"></div>
     <div><div class="load-title">Grading your card...</div></div>
     <div class="load-steps">
-      <div class="load-step" id="step1"><div class="step-dot"></div> Analyzing centering ratios</div>
-      <div class="load-step" id="step2"><div class="step-dot"></div> Inspecting corners & edges</div>
-      <div class="load-step" id="step3"><div class="step-dot"></div> Scanning surface condition</div>
-      <div class="load-step" id="step4"><div class="step-dot"></div> Computing final grade</div>
+      <div class="load-step" id="step1"><div class="step-dot"></div> Measuring border pixels</div>
+      <div class="load-step" id="step2"><div class="step-dot"></div> Calculating centering ratios</div>
+      <div class="load-step" id="step3"><div class="step-dot"></div> Scanning surface defects</div>
+      <div class="load-step" id="step4"><div class="step-dot"></div> Generating defect map</div>
+      <div class="load-step" id="step5"><div class="step-dot"></div> Computing final grade</div>
     </div>
   </div>
 </div>
 
+<!-- RESULTS -->
 <div class="screen" id="screen-results">
+  <button class="home-btn" onclick="goHome()">← Home</button>
+
   <div class="grade-hero" id="gradeHero">
-    <div class="grade-info">
+    <div>
       <div class="grade-card-name" id="gradeCardName">POKÉMON CARD</div>
       <div class="grade-label-text" id="gradeLabelText">—</div>
       <div class="grade-sublabel">PSA-Style Grade</div>
@@ -155,85 +279,240 @@ input[type="file"] { display: none; }
       <div class="grade-score-sub">/ 10</div>
     </div>
   </div>
+
+  <div class="section-title">📐 Border Measurements</div>
+  <div class="border-measure-card">
+    <div class="border-diagram" id="borderDiagram"></div>
+    <div class="ratio-grid" id="ratioGrid"></div>
+    <div class="centering-verdict" id="centeringVerdict"></div>
+  </div>
+
+  <div class="section-title">🔍 Surface Defect Imaging</div>
+  <div class="defect-card">
+    <div class="defect-images">
+      <div class="defect-img-wrap">
+        <canvas id="embossCanvas"></canvas>
+        <div class="defect-img-label">SURFACE SCAN</div>
+      </div>
+      <div class="defect-img-wrap" style="position:relative;" id="defectMapWrap">
+        <canvas id="defectMapCanvas"></canvas>
+        <div class="defect-img-label">DEFECT MAP</div>
+      </div>
+    </div>
+    <div class="defect-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#FF3B30"></div> Scratch/Wear</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FF9500"></div> Print Defect</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FFD000"></div> Crease/Indent</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0A84FF"></div> Corner Wear</div>
+    </div>
+    <div class="defect-list" id="defectList"></div>
+  </div>
+
   <div class="section-title">Category Scores</div>
   <div id="scoreRows"></div>
+
   <div class="section-title">Detailed Analysis</div>
   <div id="analysisCards"></div>
+
   <div class="divider"></div>
-  <button class="btn-primary" onclick="reset()" style="background:var(--card);border:1.5px solid var(--border);color:var(--text);">Grade Another Card</button>
+  <button class="btn-primary" onclick="goHome()" style="background:var(--card);border:1.5px solid var(--border);color:var(--text);">🏠 Grade Another Card</button>
 </div>
 
+<!-- CAMERA -->
 <div id="cameraOverlay">
   <video id="videoFeed" autoplay playsinline muted></video>
-  <div class="cam-label">FIT CARD IN FRAME</div>
-  <div class="cam-guide"></div>
   <canvas id="snapCanvas"></canvas>
-  <div class="cam-controls">
-    <button class="cam-cancel" onclick="closeCamera()">Cancel</button>
-    <button class="shutter" onclick="capturePhoto()"></button>
-    <div class="cam-tip">Tap to capture</div>
+  <div class="cam-flash" id="camFlash"></div>
+  <div class="cam-ui">
+    <div class="align-ring-wrap" id="alignRingWrap">
+      <div class="align-card-guide" id="alignGuide">
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
+      </div>
+      <svg class="align-progress-svg" id="alignSvg" viewBox="0 0 100 140" preserveAspectRatio="none">
+        <rect class="progress-rect" id="progressRect" x="2" y="2" width="96" height="136" rx="8" ry="8"/>
+      </svg>
+      <div class="cam-score-badge" id="camScoreBadge">ALIGN CARD</div>
+      <div class="cam-instruction" id="camInstruction">Move card to fill the frame</div>
+    </div>
   </div>
+  <button class="cam-cancel-btn" onclick="closeCamera()">Cancel</button>
 </div>
 
 <script>
 const WORKER_URL = 'https://pokegrader-api.jaydengoosen1.workers.dev';
-let imgBase64 = null, mediaType = 'image/jpeg', camStream = null, stepTimer = null;
+let imgBase64 = null, mediaType = 'image/jpeg', camStream = null;
+let stepTimer = null, alignTimer = null, captureReady = false;
+let currentImgElement = null;
 
+// ── NAVIGATION ──
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + id).classList.add('active');
   window.scrollTo(0, 0);
 }
-function goBack() {
+function goHome() {
   imgBase64 = null;
   document.getElementById('cardName').value = '';
   document.getElementById('errorMsg').style.display = 'none';
   document.getElementById('fileInput').value = '';
+  closeCamera();
   showScreen('upload');
 }
-function reset() { goBack(); }
 
+// ── FILE UPLOAD ──
 function handleFile(file) {
   if (!file || !file.type.startsWith('image/')) return;
   mediaType = file.type;
   const reader = new FileReader();
   reader.onload = e => {
     imgBase64 = e.target.result.split(',')[1];
+    currentImgElement = new Image();
+    currentImgElement.src = e.target.result;
     document.getElementById('previewImg').src = e.target.result;
     showScreen('preview');
   };
   reader.readAsDataURL(file);
 }
 
+// ── CAMERA AUTO-CAPTURE ──
 async function openCamera() {
-  document.getElementById('cameraOverlay').classList.add('open');
+  document.getElementById('cameraOverlay').style.display = 'flex';
+  captureReady = false;
   try {
-    camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1920 } } });
+    camStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } }
+    });
     document.getElementById('videoFeed').srcObject = camStream;
+    startAlignmentDetection();
   } catch(e) {
-    document.getElementById('cameraOverlay').classList.remove('open');
+    document.getElementById('cameraOverlay').style.display = 'none';
     alert('Camera access denied. Use "Upload from Library" instead.');
   }
 }
+
 function closeCamera() {
   if (camStream) camStream.getTracks().forEach(t => t.stop());
   camStream = null;
-  document.getElementById('cameraOverlay').classList.remove('open');
-}
-function capturePhoto() {
-  const video = document.getElementById('videoFeed');
-  const canvas = document.getElementById('snapCanvas');
-  canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-  canvas.getContext('2d').drawImage(video, 0, 0);
-  const dataURL = canvas.toDataURL('image/jpeg', 0.92);
-  imgBase64 = dataURL.split(',')[1]; mediaType = 'image/jpeg';
-  document.getElementById('previewImg').src = dataURL;
-  closeCamera(); showScreen('preview');
+  if (alignTimer) clearInterval(alignTimer);
+  document.getElementById('cameraOverlay').style.display = 'none';
+  resetAlignUI();
 }
 
+let alignScore = 0;
+let alignHoldFrames = 0;
+
+function startAlignmentDetection() {
+  const video = document.getElementById('videoFeed');
+  const rect = document.getElementById('progressRect');
+  const guide = document.getElementById('alignGuide');
+  const badge = document.getElementById('camScoreBadge');
+  const instruction = document.getElementById('camInstruction');
+
+  // SVG perimeter for dasharray
+  const svgEl = document.getElementById('alignSvg');
+
+  alignScore = 0;
+  alignHoldFrames = 0;
+
+  alignTimer = setInterval(() => {
+    if (!video.videoWidth) return;
+
+    // Sample center region of frame for card detection
+    const tmpCanvas = document.createElement('canvas');
+    tmpCanvas.width = 64; tmpCanvas.height = 90;
+    const ctx = tmpCanvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, 64, 90);
+    const data = ctx.getImageData(0, 0, 64, 90).data;
+
+    // Detect card fill: look for consistent colour mass in centre 
+    let edgePixels = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i], g = data[i+1], b = data[i+2];
+      const brightness = (r+g+b)/3;
+      if (brightness > 30 && brightness < 230) edgePixels++;
+    }
+    const fillRatio = edgePixels / (64*90);
+
+    // Score how well aligned (0–100)
+    const targetFill = 0.75;
+    const diff = Math.abs(fillRatio - targetFill);
+    const newScore = Math.max(0, Math.min(100, Math.round((1 - diff * 3) * 100)));
+
+    // Smooth score
+    alignScore = Math.round(alignScore * 0.7 + newScore * 0.3);
+
+    // Update UI
+    const pct = alignScore / 100;
+    const perimeter = 2 * (96 + 136); // SVG viewBox perimeter approx
+    rect.style.strokeDashoffset = perimeter * (1 - pct);
+
+    const color = alignScore >= 80 ? '#34C759' : alignScore >= 50 ? '#FFD000' : '#FF3B30';
+    rect.style.stroke = color;
+    guide.style.borderColor = color;
+
+    if (alignScore >= 80) {
+      badge.textContent = `${alignScore}% — HOLD STEADY`;
+      badge.style.color = '#34C759';
+      instruction.textContent = 'Capturing in a moment...';
+      alignHoldFrames++;
+      if (alignHoldFrames >= 8) {
+        clearInterval(alignTimer);
+        capturePhoto();
+      }
+    } else if (alignScore >= 50) {
+      badge.textContent = `${alignScore}% — ALMOST THERE`;
+      badge.style.color = '#FFD000';
+      instruction.textContent = 'Keep moving card into frame...';
+      alignHoldFrames = 0;
+    } else {
+      badge.textContent = `${alignScore}% — ALIGN CARD`;
+      badge.style.color = 'rgba(255,255,255,0.5)';
+      instruction.textContent = 'Move card to fill the frame';
+      alignHoldFrames = 0;
+    }
+  }, 100);
+}
+
+function resetAlignUI() {
+  const rect = document.getElementById('progressRect');
+  const guide = document.getElementById('alignGuide');
+  if (rect) { rect.style.strokeDashoffset = '1000'; rect.style.stroke = '#FFD000'; }
+  if (guide) guide.style.borderColor = 'rgba(255,255,255,0.3)';
+  alignScore = 0; alignHoldFrames = 0;
+}
+
+function capturePhoto() {
+  // Flash effect
+  const flash = document.getElementById('camFlash');
+  flash.classList.add('flash');
+  setTimeout(() => flash.classList.remove('flash'), 150);
+
+  const video = document.getElementById('videoFeed');
+  const canvas = document.getElementById('snapCanvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  const dataURL = canvas.toDataURL('image/jpeg', 0.92);
+
+  imgBase64 = dataURL.split(',')[1];
+  mediaType = 'image/jpeg';
+  currentImgElement = new Image();
+  currentImgElement.src = dataURL;
+  document.getElementById('previewImg').src = dataURL;
+
+  setTimeout(() => {
+    closeCamera();
+    showScreen('preview');
+  }, 200);
+}
+
+// ── LOADING STEPS ──
 function startSteps() {
-  const steps = ['step1','step2','step3','step4'];
-  steps.forEach(s => { document.getElementById(s).classList.remove('active','done'); });
+  const steps = ['step1','step2','step3','step4','step5'];
+  steps.forEach(s => document.getElementById(s).classList.remove('active','done'));
   document.getElementById(steps[0]).classList.add('active');
   let i = 0;
   stepTimer = setInterval(() => {
@@ -242,9 +521,10 @@ function startSteps() {
     i++;
     if (i < steps.length) document.getElementById(steps[i]).classList.add('active');
     else clearInterval(stepTimer);
-  }, 1600);
+  }, 1400);
 }
 
+// ── HELPERS ──
 function scoreColor(s) {
   if (s >= 9) return '#34C759';
   if (s >= 7) return '#FFD000';
@@ -262,16 +542,60 @@ function gradeLabel(s) {
   if (s >= 2) return 'Good';
   return 'Poor';
 }
+function ratioColor(a, b) {
+  const ratio = Math.max(a,b)/(a+b);
+  if (ratio <= 0.52) return '#34C759';
+  if (ratio <= 0.55) return '#FFD000';
+  if (ratio <= 0.60) return '#FF9500';
+  return '#FF3B30';
+}
+function defectColor(type) {
+  if (type === 'scratch' || type === 'wear') return '#FF3B30';
+  if (type === 'print') return '#FF9500';
+  if (type === 'crease') return '#FFD000';
+  if (type === 'corner') return '#0A84FF';
+  return '#8E8E93';
+}
 
+// ── ANALYZE ──
 async function analyze() {
   if (!imgBase64) return;
   document.getElementById('errorMsg').style.display = 'none';
-  showScreen('loading'); startSteps();
+  showScreen('loading');
+  startSteps();
+
   const cardName = document.getElementById('cardName').value.trim();
-  const system = `You are a professional Pokémon TCG card grading expert with PSA, BGS, and CGC-level knowledge. Analyze the card image and return ONLY a valid JSON object — no markdown, no code fences, no explanation.
-Format:
-{"centering":{"score":<1.0-10.0>,"descriptor":"<short phrase>","notes":"<2-3 sentences>"},"corners":{"score":<1.0-10.0>,"descriptor":"<short phrase>","notes":"<2-3 sentences>"},"surface":{"score":<1.0-10.0>,"descriptor":"<short phrase>","notes":"<2-3 sentences>"},"edges":{"score":<1.0-10.0>,"descriptor":"<short phrase>","notes":"<2-3 sentences>"},"overall":{"score":<1.0-10.0>,"label":"<grade name>","summary":"<3-4 sentences>"}}
-Scale: 10=Gem Mint,9-9.5=Mint,8-8.9=NM-M,7-7.9=NM,6-6.9=EX-NM,5-5.9=EX,3-4.9=VG,1-2.9=Poor. Be honest and precise.`;
+
+  const system = `You are a professional Pokémon TCG card grading expert matching PSA/BGS/CGC standards. Analyze the card and return ONLY valid JSON, no markdown, no explanation.
+
+{
+  "borders": {
+    "top": <int px>,
+    "bottom": <int px>,
+    "left": <int px>,
+    "right": <int px>,
+    "notes": "<1-2 sentences>"
+  },
+  "defects": [
+    {
+      "type": "<scratch|wear|print|crease|corner>",
+      "location": "<top-left|top-right|bottom-left|bottom-right|top-center|bottom-center|left-center|right-center|center>",
+      "x_pct": <0-100 percent from left>,
+      "y_pct": <0-100 percent from top>,
+      "description": "<short description>",
+      "severity": "<minor|moderate|major>"
+    }
+  ],
+  "centering": { "score": <1.0-10.0>, "descriptor": "<phrase>", "notes": "<2-3 sentences>" },
+  "corners":   { "score": <1.0-10.0>, "descriptor": "<phrase>", "notes": "<2-3 sentences>" },
+  "surface":   { "score": <1.0-10.0>, "descriptor": "<phrase>", "notes": "<2-3 sentences>" },
+  "edges":     { "score": <1.0-10.0>, "descriptor": "<phrase>", "notes": "<2-3 sentences>" },
+  "overall":   { "score": <1.0-10.0>, "label": "<grade>", "summary": "<3-4 sentences>" }
+}
+
+Borders: estimate px width of each border (coloured frame around art). Typical range 60-140px.
+Defects: list ALL visible issues. If none found, return empty array.
+Scale: 10=Gem Mint, 9=Mint, 8=NM-M, 7=NM, 6=EX-NM, 5=EX, 3-4=VG, 1-2=Poor.`;
 
   try {
     const res = await fetch(WORKER_URL, {
@@ -279,7 +603,7 @@ Scale: 10=Gem Mint,9-9.5=Mint,8-8.9=NM-M,7-7.9=NM,6-6.9=EX-NM,5-5.9=EX,3-4.9=VG,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1000,
+        max_tokens: 1500,
         system,
         messages: [{ role: 'user', content: [
           { type: 'image', source: { type: 'base64', media_type: mediaType, data: imgBase64 } },
@@ -290,8 +614,9 @@ Scale: 10=Gem Mint,9-9.5=Mint,8-8.9=NM-M,7-7.9=NM,6-6.9=EX-NM,5-5.9=EX,3-4.9=VG,
     clearInterval(stepTimer);
     const data = await res.json();
     if (data.error) throw new Error(data.error.message);
-    const raw = (data.content||[]).map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
-    renderResults(JSON.parse(raw), cardName);
+    const raw = (data.content||[]).map(b => b.text||'').join('').replace(/```json|```/g,'').trim();
+    const result = JSON.parse(raw);
+    renderResults(result, cardName);
     showScreen('results');
   } catch(err) {
     clearInterval(stepTimer);
@@ -302,24 +627,220 @@ Scale: 10=Gem Mint,9-9.5=Mint,8-8.9=NM-M,7-7.9=NM,6-6.9=EX-NM,5-5.9=EX,3-4.9=VG,
   }
 }
 
+// ── RENDER RESULTS ──
 function renderResults(r, cardName) {
-  const overall = r.overall.score, color = scoreColor(overall);
+  const overall = r.overall.score;
+  const color = scoreColor(overall);
+
   document.getElementById('gradeCardName').textContent = (cardName||'Pokémon Card').toUpperCase();
   document.getElementById('gradeLabelText').textContent = r.overall.label || gradeLabel(overall);
   document.getElementById('gradeScore').textContent = overall.toFixed(1);
   document.getElementById('gradeScore').style.color = color;
   document.getElementById('gradeHero').style.borderLeftColor = color;
 
-  const cats = [{key:'centering',label:'Centering',icon:'🎯'},{key:'corners',label:'Corners',icon:'📐'},{key:'surface',label:'Surface',icon:'🔍'},{key:'edges',label:'Edges',icon:'📏'}];
+  // Border diagram
+  setTimeout(() => {
+    renderBorderDiagram(r.borders);
+    renderDefectImaging(r.defects || []);
+  }, 150);
+
+  // Score rows
+  const cats = [
+    {key:'centering',label:'Centering',icon:'🎯'},
+    {key:'corners',label:'Corners',icon:'📐'},
+    {key:'surface',label:'Surface',icon:'🔍'},
+    {key:'edges',label:'Edges',icon:'📏'}
+  ];
   document.getElementById('scoreRows').innerHTML = cats.map((c,i) => {
     const d = r[c.key], col = scoreColor(d.score);
-    return `<div class="score-row" style="animation-delay:${i*0.07}s"><div class="score-row-top"><div class="score-row-left"><span class="score-icon">${c.icon}</span><div><div class="score-cat-name">${c.label}</div><div class="score-descriptor">${d.descriptor}</div></div></div><div class="score-num-badge" style="color:${col}">${d.score.toFixed(1)}</div></div><div class="bar-track"><div class="bar-fill" style="width:${(d.score/10)*100}%;background:${col};"></div></div></div>`;
+    return `<div class="score-row" style="animation-delay:${i*0.07}s">
+      <div class="score-row-top">
+        <div class="score-row-left">
+          <span class="score-icon">${c.icon}</span>
+          <div><div class="score-cat-name">${c.label}</div><div class="score-descriptor">${d.descriptor}</div></div>
+        </div>
+        <div class="score-num-badge" style="color:${col}">${d.score.toFixed(1)}</div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(d.score/10)*100}%;background:${col}"></div></div>
+    </div>`;
   }).join('');
 
-  document.getElementById('analysisCards').innerHTML = [...cats,{key:'overall',label:'Overall Assessment',icon:'⭐'}].map(c => {
-    const text = c.key==='overall' ? r.overall.summary : r[c.key].notes;
-    return `<div class="analysis-card"><div class="analysis-cat">${c.icon} ${c.label}</div><div class="analysis-text">${text}</div></div>`;
-  }).join('');
+  // Analysis cards
+  document.getElementById('analysisCards').innerHTML = [
+    {icon:'📐', label:'Border Measurements', text: r.borders.notes},
+    ...cats.map(c => ({icon:c.icon, label:c.label, text:r[c.key].notes})),
+    {icon:'⭐', label:'Overall Assessment', text:r.overall.summary}
+  ].map(c => `<div class="analysis-card">
+    <div class="analysis-cat">${c.icon} ${c.label}</div>
+    <div class="analysis-text">${c.text}</div>
+  </div>`).join('');
+}
+
+// ── BORDER DIAGRAM ──
+function renderBorderDiagram(b) {
+  const wrap = document.getElementById('borderDiagram');
+  const W = wrap.offsetWidth || 260;
+  const H = wrap.offsetHeight || 200;
+
+  const maxB = Math.max(b.top, b.bottom, b.left, b.right);
+  const scale = (Math.min(W, H) * 0.18) / maxB;
+  const tS = Math.round(b.top * scale);
+  const bS = Math.round(b.bottom * scale);
+  const lS = Math.round(b.left * scale);
+  const rS = Math.round(b.right * scale);
+
+  const tc = ratioColor(b.top, b.bottom);
+  const bc = ratioColor(b.top, b.bottom);
+  const lc = ratioColor(b.left, b.right);
+  const rc = ratioColor(b.left, b.right);
+
+  const innerW = W - lS - rS;
+  const innerH = H - tS - bS;
+
+  wrap.innerHTML = `
+    <div class="bd-outer"></div>
+    <div class="bd-inner" style="top:${tS}px;left:${lS}px;width:${innerW}px;height:${innerH}px;">
+      <div class="bd-inner-label">ART AREA</div>
+    </div>
+    <!-- TOP -->
+    <div class="bd-line" style="top:${tS/2}px;left:20%;width:60%;height:1.5px;background:${tc};transform:translateY(-50%)"></div>
+    <div class="bd-label" style="top:${tS/2 - 10}px;left:50%;transform:translateX(-50%);color:${tc}">${b.top}px · ${Math.round(b.top/(b.top+b.bottom)*100)}%</div>
+    <!-- BOTTOM -->
+    <div class="bd-line" style="bottom:${bS/2}px;left:20%;width:60%;height:1.5px;background:${bc};transform:translateY(50%)"></div>
+    <div class="bd-label" style="bottom:${bS/2 - 10}px;left:50%;transform:translateX(-50%);color:${bc}">${b.bottom}px · ${Math.round(b.bottom/(b.top+b.bottom)*100)}%</div>
+    <!-- LEFT -->
+    <div class="bd-line" style="left:${lS/2}px;top:20%;width:1.5px;height:60%;background:${lc};transform:translateX(-50%)"></div>
+    <div class="bd-label" style="left:4px;top:50%;transform:translateY(-50%);color:${lc};writing-mode:vertical-rl;transform:translateY(-50%) rotate(180deg)">${b.left}px·${Math.round(b.left/(b.left+b.right)*100)}%</div>
+    <!-- RIGHT -->
+    <div class="bd-line" style="right:${rS/2}px;top:20%;width:1.5px;height:60%;background:${rc};transform:translateX(50%)"></div>
+    <div class="bd-label" style="right:4px;top:50%;transform:translateY(-50%);color:${rc};writing-mode:vertical-rl">${b.right}px·${Math.round(b.right/(b.left+b.right)*100)}%</div>
+  `;
+
+  // Ratio pills
+  const tbC = ratioColor(b.top, b.bottom);
+  const lrC = ratioColor(b.left, b.right);
+  document.getElementById('ratioGrid').innerHTML = `
+    <div class="ratio-pill">
+      <div class="ratio-pill-label">Top / Bottom</div>
+      <div class="ratio-pill-value" style="color:${tbC}">${Math.round(b.top/(b.top+b.bottom)*100)}/${Math.round(b.bottom/(b.top+b.bottom)*100)}</div>
+      <div class="ratio-pill-sub">${b.top}px — ${b.bottom}px</div>
+    </div>
+    <div class="ratio-pill">
+      <div class="ratio-pill-label">Left / Right</div>
+      <div class="ratio-pill-value" style="color:${lrC}">${Math.round(b.left/(b.left+b.right)*100)}/${Math.round(b.right/(b.left+b.right)*100)}</div>
+      <div class="ratio-pill-sub">${b.left}px — ${b.right}px</div>
+    </div>
+  `;
+
+  // Verdict
+  const worst = Math.max(Math.max(b.top,b.bottom)/Math.min(b.top,b.bottom), Math.max(b.left,b.right)/Math.min(b.left,b.right));
+  let vc, vt;
+  if (worst <= 1.1) { vc='#34C759'; vt='Excellent centering — near 50/50 on all sides'; }
+  else if (worst <= 1.25) { vc='#FFD000'; vt='Slight variance — minor offset visible'; }
+  else if (worst <= 1.5) { vc='#FF9500'; vt='Moderate centering issue — visible border difference'; }
+  else { vc='#FF3B30'; vt='Poor centering — significant border imbalance'; }
+  const cv = document.getElementById('centeringVerdict');
+  cv.innerHTML = `<div class="verdict-dot" style="background:${vc}"></div><span style="color:${vc}">${vt}</span>`;
+  cv.style.background = vc + '18';
+}
+
+// ── TAG-STYLE DEFECT IMAGING ──
+function renderDefectImaging(defects) {
+  const src = document.getElementById('previewImg').src;
+  if (!src) return;
+
+  const img = new Image();
+  img.onload = () => {
+    // === EMBOSS CANVAS ===
+    const ec = document.getElementById('embossCanvas');
+    ec.width = img.naturalWidth;
+    ec.height = img.naturalHeight;
+    const ectx = ec.getContext('2d');
+    ectx.drawImage(img, 0, 0);
+
+    // Greyscale
+    const id = ectx.getImageData(0, 0, ec.width, ec.height);
+    const d = id.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const grey = d[i]*0.299 + d[i+1]*0.587 + d[i+2]*0.114;
+      d[i] = d[i+1] = d[i+2] = grey;
+    }
+    ectx.putImageData(id, 0, 0);
+
+    // Emboss convolution
+    const src2 = ectx.getImageData(0, 0, ec.width, ec.height);
+    const dst = ectx.createImageData(ec.width, ec.height);
+    const sd = src2.data, dd = dst.data;
+    const w = ec.width;
+    for (let y = 1; y < ec.height - 1; y++) {
+      for (let x = 1; x < w - 1; x++) {
+        const i = (y * w + x) * 4;
+        const tl = ((y-1)*w+(x-1))*4;
+        const br = ((y+1)*w+(x+1))*4;
+        let v = sd[tl] - sd[br] + 128;
+        v = Math.max(0, Math.min(255, v));
+        dd[i] = dd[i+1] = dd[i+2] = v;
+        dd[i+3] = 255;
+      }
+    }
+    ectx.putImageData(dst, 0, 0);
+
+    // === DEFECT MAP CANVAS ===
+    const dc = document.getElementById('defectMapCanvas');
+    dc.width = img.naturalWidth;
+    dc.height = img.naturalHeight;
+    const dctx = dc.getContext('2d');
+
+    // Draw greyscale base
+    dctx.filter = 'grayscale(100%) brightness(0.6)';
+    dctx.drawImage(img, 0, 0);
+    dctx.filter = 'none';
+
+    // Draw defect markers
+    defects.forEach(def => {
+      const x = (def.x_pct / 100) * dc.width;
+      const y = (def.y_pct / 100) * dc.height;
+      const col = defectColor(def.type);
+      const r = Math.max(20, dc.width * 0.04);
+
+      // Outer glow
+      dctx.beginPath();
+      dctx.arc(x, y, r * 1.8, 0, Math.PI * 2);
+      dctx.fillStyle = col + '22';
+      dctx.fill();
+
+      // Circle
+      dctx.beginPath();
+      dctx.arc(x, y, r, 0, Math.PI * 2);
+      dctx.strokeStyle = col;
+      dctx.lineWidth = 3;
+      dctx.stroke();
+
+      // Centre dot
+      dctx.beginPath();
+      dctx.arc(x, y, r * 0.25, 0, Math.PI * 2);
+      dctx.fillStyle = col;
+      dctx.fill();
+    });
+
+    // Defect list
+    const dl = document.getElementById('defectList');
+    if (defects.length === 0) {
+      dl.innerHTML = `<div class="defect-item"><div class="defect-item-dot" style="background:#34C759"></div><span style="color:#34C759">No significant defects detected</span></div>`;
+    } else {
+      dl.innerHTML = defects.map(d => {
+        const col = defectColor(d.type);
+        return `<div class="defect-item">
+          <div class="defect-item-dot" style="background:${col}"></div>
+          <div>
+            <div style="font-family:var(--font-display);font-size:13px;color:${col};text-transform:uppercase;letter-spacing:0.5px">${d.type} — ${d.severity}</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px">${d.location.replace(/-/g,' ')} · ${d.description}</div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+  };
+  img.src = src;
 }
 </script>
 </body>
