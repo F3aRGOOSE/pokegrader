@@ -33,61 +33,97 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
 .fc .lb{font-family:var(--fd);font-size:12px;line-height:1.2}
 .fc .ds{color:var(--muted);font-size:11px;margin-top:2px;font-weight:300}
 
-/* CAMERA */
-#camOverlay{display:none;position:fixed;inset:0;background:#000;z-index:999;flex-direction:column}
-#camOverlay.open{display:flex}
+/* ── CAMERA ── */
+#camOverlay{display:none;position:fixed;inset:0;background:#000;z-index:999}
+#camOverlay.open{display:block}
 #vidFeed{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 #snapCanvas{display:none}
-.cam-ui{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
-.cam-guide-wrap{position:relative;width:68vw;aspect-ratio:2.5/3.5}
-.cam-card-border{position:absolute;inset:0;border:2px solid rgba(255,255,255,0.25);border-radius:10px;transition:border-color .3s}
+.cam-flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:9999;transition:opacity .08s}
+.cam-flash.on{opacity:1}
+.cam-cancel{position:absolute;top:52px;left:16px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:20px;padding:8px 16px;font-family:var(--fb);font-size:14px;cursor:pointer;backdrop-filter:blur(8px);z-index:10}
+
+/* SPIRIT LEVELS */
+.level-h{position:absolute;top:52px;left:50%;transform:translateX(-50%);width:55%;height:18px;background:rgba(0,0,0,.5);border-radius:20px;border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(4px);z-index:10;overflow:hidden}
+.level-h-track{position:absolute;inset:3px;border-radius:20px;background:rgba(255,255,255,.08)}
+.level-h-bubble{position:absolute;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);transition:left .1s ease}
+.level-v{position:absolute;top:50%;right:16px;transform:translateY(-50%);width:18px;height:120px;background:rgba(0,0,0,.5);border-radius:20px;border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(4px);z-index:10;overflow:hidden}
+.level-v-track{position:absolute;inset:3px;border-radius:20px;background:rgba(255,255,255,.08)}
+.level-v-bubble{position:absolute;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);transition:top .1s ease}
+
+/* GRID OVERLAY */
+.cam-grid{position:absolute;inset:0;pointer-events:none;z-index:5}
+.cam-grid line{stroke:rgba(255,255,255,.15);stroke-width:1}
+
+/* CARD GUIDE */
+.cam-guide-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:65vw;aspect-ratio:2.5/3.5;z-index:6}
+.cam-card-border{position:absolute;inset:0;border:2px solid rgba(255,255,255,.3);border-radius:10px;transition:border-color .3s}
 .cam-svg{position:absolute;inset:-6px;width:calc(100% + 12px);height:calc(100% + 12px);pointer-events:none}
-.cam-progress{fill:none;stroke:var(--yellow);stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .15s ease,stroke .3s}
+.cam-progress{fill:none;stroke:var(--yellow);stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .15s,stroke .3s}
 .corner{position:absolute;width:18px;height:18px;border-color:var(--yellow);border-style:solid}
 .corner.tl{top:-2px;left:-2px;border-width:3px 0 0 3px;border-radius:3px 0 0 0}
 .corner.tr{top:-2px;right:-2px;border-width:3px 3px 0 0;border-radius:0 3px 0 0}
 .corner.bl{bottom:-2px;left:-2px;border-width:0 0 3px 3px;border-radius:0 0 0 3px}
 .corner.br{bottom:-2px;right:-2px;border-width:0 3px 3px 0;border-radius:0 0 3px 0}
-.cam-checks{position:absolute;bottom:-90px;left:50%;transform:translateX(-50%);display:flex;gap:8px;white-space:nowrap}
-.chk{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 10px;font-family:var(--fd);font-size:11px;letter-spacing:.5px;backdrop-filter:blur(8px);transition:all .3s}
+
+/* CHECK PILLS */
+.cam-checks{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
+.chk{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 10px;font-family:var(--fd);font-size:11px;letter-spacing:.5px;backdrop-filter:blur(8px);transition:all .3s;white-space:nowrap}
 .chk-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .3s}
 .chk.pass .chk-dot{background:var(--green)}.chk.pass{border-color:rgba(52,199,89,.4);color:var(--green)}
 .chk.fail .chk-dot{background:var(--red)}.chk.fail{border-color:rgba(255,59,48,.3);color:var(--red)}
-.cam-badge{position:absolute;top:-44px;left:50%;transform:translateX(-50%);font-family:var(--fd);font-size:13px;letter-spacing:1px;color:rgba(255,255,255,.5);white-space:nowrap;transition:color .3s;text-align:center}
-.cam-cancel{position:absolute;top:44px;left:16px;background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:20px;padding:7px 14px;font-family:var(--fb);font-size:14px;cursor:pointer;backdrop-filter:blur(8px)}
-.cam-flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:9999;transition:opacity .08s}
-.cam-flash.on{opacity:1}
+.cam-badge{position:absolute;bottom:130px;left:50%;transform:translateX(-50%);font-family:var(--fd);font-size:13px;letter-spacing:1px;color:rgba(255,255,255,.5);white-space:nowrap;z-index:10;text-align:center;transition:color .3s}
 
-/* BORDER TOOL - HTML DIV LINES */
+/* ── STRAIGHTEN SCREEN ── */
+.straighten-wrap{position:relative;width:100%;background:#000;border-radius:16px;overflow:hidden;margin-bottom:16px;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center}
+.straighten-inner{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#straightenImg{max-width:140%;max-height:140%;object-fit:contain;transform-origin:center;transition:transform .05s}
+.str-grid{position:absolute;inset:0;pointer-events:none;z-index:5}
+
+.str-controls{background:var(--card);border-radius:14px;padding:16px;margin-bottom:14px}
+.str-label{font-family:var(--fd);font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;text-align:center}
+.str-slider-wrap{display:flex;align-items:center;gap:10px}
+.str-icon{font-size:18px}
+.str-slider{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:var(--card2);outline:none}
+.str-slider::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--yellow);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.str-angle{font-family:var(--fd);font-size:14px;color:var(--yellow);min-width:45px;text-align:center}
+.str-reset{background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:var(--fb);font-size:12px;padding:6px 12px;cursor:pointer;margin-top:10px;width:100%}
+
+/* ── BORDER TOOL ── */
 .bwrap{position:relative;width:100%;background:#000;border-radius:16px;overflow:hidden;margin-bottom:16px;user-select:none}
 .bwrap img{width:100%;display:block}
 
-/* The 4 draggable lines */
+/* Lines as divs */
 .bline{position:absolute;z-index:10;touch-action:none}
-.bline-h{left:0;right:0;height:44px;cursor:ns-resize;transform:translateY(-50%)}
-.bline-v{top:0;bottom:0;width:44px;cursor:ew-resize;transform:translateX(-50%)}
-.bline-inner-h{position:absolute;left:0;right:0;top:50%;height:3px;transform:translateY(-50%);pointer-events:none}
-.bline-inner-v{position:absolute;top:0;bottom:0;left:50%;width:3px;transform:translateX(-50%);pointer-events:none}
-
-/* Handle knob */
-.bhandle{position:absolute;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.bline-h{left:0;right:0;height:48px;cursor:ns-resize;transform:translateY(-50%)}
+.bline-v{top:0;bottom:0;width:48px;cursor:ew-resize;transform:translateX(-50%)}
+.bline-vis-h{position:absolute;left:0;right:0;top:50%;height:3px;transform:translateY(-50%);pointer-events:none}
+.bline-vis-v{position:absolute;top:0;bottom:0;left:50%;width:3px;transform:translateX(-50%);pointer-events:none}
+.bhandle{position:absolute;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.6)}
 .bline-h .bhandle{left:50%;top:50%;transform:translate(-50%,-50%)}
 .bline-v .bhandle{left:50%;top:50%;transform:translate(-50%,-50%)}
+.bshade{position:absolute;background:rgba(0,0,0,.5);pointer-events:none;z-index:5}
 
-/* Shaded outer regions */
-.bshade{position:absolute;background:rgba(0,0,0,.45);pointer-events:none;z-index:5}
-
-/* Stats */
+/* Stats grid */
 .bstats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
 .bst{background:var(--card);border-radius:10px;padding:10px 12px}
 .bst-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
 .bst-v{font-family:var(--fd);font-size:16px}
 .bst-s{font-size:11px;color:var(--muted);margin-top:1px}
 
-.border-hint{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px}
-.bh-icon{font-size:20px;flex-shrink:0}
-.bh-text{font-size:13px;color:var(--muted);line-height:1.5;font-weight:300}
+.ratio-display{background:var(--card);border-radius:12px;padding:14px 16px;margin-bottom:14px;display:flex;justify-content:space-around;align-items:center}
+.ratio-item{text-align:center}
+.ratio-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
+.ratio-value{font-family:var(--fd);font-size:22px}
+
+.border-hint{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:13px;display:flex;align-items:flex-start;gap:10px}
+.bh-icon{font-size:18px;flex-shrink:0}
+.bh-text{font-size:12px;color:var(--muted);line-height:1.5;font-weight:300}
 .bh-text strong{color:var(--text)}
+
+/* Line legend */
+.line-legend{display:flex;gap:12px;margin-bottom:13px;flex-wrap:wrap}
+.ll-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.ll-line{width:20px;height:3px;border-radius:2px}
 
 /* INPUTS */
 .ig{margin-bottom:14px}
@@ -164,64 +200,100 @@ input[type=file]{display:none}
 <!-- UPLOAD -->
 <div class="screen active" id="screen-upload">
   <div style="font-family:var(--fd);font-size:36px;line-height:1.1;letter-spacing:-1px;margin-bottom:11px">Grade your<br><span style="color:var(--yellow)">Pokémon</span><br>cards.</div>
-  <div style="color:var(--muted);font-size:14px;font-weight:300;line-height:1.5;margin-bottom:32px">Drag border lines to measure exactly. AI cross-references dual scans for precise PSA-style grading.</div>
+  <div style="color:var(--muted);font-size:14px;font-weight:300;line-height:1.5;margin-bottom:32px">Spirit level camera, photo straightener, precision border tool. PSA-style grading with exact measurements.</div>
   <button class="btn-p" onclick="openCamera()"><span style="font-size:19px">📷</span> Auto-Scan Card</button>
   <button class="btn-s" onclick="document.getElementById('fi').click()"><span style="font-size:19px">🖼️</span> Upload from Library</button>
   <input type="file" id="fi" accept="image/*" onchange="handleFile(this.files[0])">
   <div class="features">
-    <div class="fc"><div class="ic">🎯</div><div class="lb">Smart Capture</div><div class="ds">Lighting + level</div></div>
-    <div class="fc"><div class="ic">📐</div><div class="lb">Drag to Measure</div><div class="ds">Exact border px</div></div>
-    <div class="fc"><div class="ic">🔍</div><div class="lb">Dual Scan</div><div class="ds">Cross-ref defects</div></div>
+    <div class="fc"><div class="ic">🎯</div><div class="lb">Spirit Level</div><div class="ds">Level before capture</div></div>
+    <div class="fc"><div class="ic">↩️</div><div class="lb">Straightener</div><div class="ds">Rotate to align</div></div>
+    <div class="fc"><div class="ic">📐</div><div class="lb">Dual Border Lines</div><div class="ds">Outer + inner edges</div></div>
     <div class="fc"><div class="ic">⭐</div><div class="lb">PSA Score</div><div class="ds">1–10 grade</div></div>
   </div>
+</div>
+
+<!-- STRAIGHTEN -->
+<div class="screen" id="screen-straighten">
+  <button class="home-btn" onclick="goHome()">← Home</button>
+  <div style="font-family:var(--fd);font-size:16px;margin-bottom:4px">Straighten Card</div>
+  <div style="color:var(--muted);font-size:13px;font-weight:300;margin-bottom:14px">Rotate until the card edges are perfectly level</div>
+  <div class="straighten-wrap">
+    <div class="straighten-inner">
+      <img id="straightenImg" src="" alt="Card">
+      <svg class="str-grid" id="strGrid"></svg>
+    </div>
+  </div>
+  <div class="str-controls">
+    <div class="str-label">ROTATION — <span id="strAngleLabel">0.0°</span></div>
+    <div class="str-slider-wrap">
+      <span class="str-icon">↺</span>
+      <input type="range" class="str-slider" id="strSlider" min="-15" max="15" step="0.1" value="0" oninput="updateRotation(this.value)">
+      <span class="str-icon">↻</span>
+    </div>
+    <button class="str-reset" onclick="resetRotation()">Reset to 0°</button>
+  </div>
+  <button class="btn-p" onclick="confirmStraighten()">✓ Looks Straight — Continue</button>
+  <button class="btn-g" onclick="goHome()">← Retake Photo</button>
 </div>
 
 <!-- BORDER TOOL -->
 <div class="screen" id="screen-border">
   <button class="home-btn" onclick="goHome()">← Home</button>
+
   <div class="border-hint">
     <div class="bh-icon">📐</div>
-    <div class="bh-text"><strong>Drag the coloured lines</strong> to the exact edges of your card. Yellow = top/bottom. Blue = left/right.</div>
+    <div class="bh-text">
+      <strong>Drag the lines to the card edges.</strong><br>
+      🟡 Yellow = outer card edge &nbsp;|&nbsp; 🔵 Blue = inner border edge (where art starts)
+    </div>
   </div>
 
-  <!-- Image + overlay lines -->
+  <div class="line-legend">
+    <div class="ll-item"><div class="ll-line" style="background:#FFD000"></div>Outer edge (card border)</div>
+    <div class="ll-item"><div class="ll-line" style="background:#0A84FF"></div>Inner edge (art area)</div>
+  </div>
+
   <div class="bwrap" id="bwrap">
     <img id="bimg" src="" alt="Card">
-    <!-- TOP line -->
-    <div class="bline bline-h" id="bl-top">
-      <div class="bline-inner-h" style="background:#FFD000"></div>
-      <div class="bhandle" style="background:#FFD000;color:#000">↕</div>
-    </div>
-    <!-- BOTTOM line -->
-    <div class="bline bline-h" id="bl-bottom">
-      <div class="bline-inner-h" style="background:#FFD000"></div>
-      <div class="bhandle" style="background:#FFD000;color:#000">↕</div>
-    </div>
-    <!-- LEFT line -->
-    <div class="bline bline-v" id="bl-left">
-      <div class="bline-inner-v" style="background:#0A84FF"></div>
-      <div class="bhandle" style="background:#0A84FF;color:#fff">↔</div>
-    </div>
-    <!-- RIGHT line -->
-    <div class="bline bline-v" id="bl-right">
-      <div class="bline-inner-v" style="background:#0A84FF"></div>
-      <div class="bhandle" style="background:#0A84FF;color:#fff">↔</div>
-    </div>
-    <!-- Shade overlays -->
+    <!-- OUTER lines (yellow) -->
+    <div class="bline bline-h" id="bl-otop"><div class="bline-vis-h" style="background:#FFD000"></div><div class="bhandle" style="background:#FFD000;color:#000">↕</div></div>
+    <div class="bline bline-h" id="bl-obottom"><div class="bline-vis-h" style="background:#FFD000"></div><div class="bhandle" style="background:#FFD000;color:#000">↕</div></div>
+    <div class="bline bline-v" id="bl-oleft"><div class="bline-vis-v" style="background:#FFD000"></div><div class="bhandle" style="background:#FFD000;color:#000">↔</div></div>
+    <div class="bline bline-v" id="bl-oright"><div class="bline-vis-v" style="background:#FFD000"></div><div class="bhandle" style="background:#FFD000;color:#000">↔</div></div>
+    <!-- INNER lines (blue) -->
+    <div class="bline bline-h" id="bl-itop"><div class="bline-vis-h" style="background:#0A84FF"></div><div class="bhandle" style="background:#0A84FF;color:#fff">↕</div></div>
+    <div class="bline bline-h" id="bl-ibottom"><div class="bline-vis-h" style="background:#0A84FF"></div><div class="bhandle" style="background:#0A84FF;color:#fff">↕</div></div>
+    <div class="bline bline-v" id="bl-ileft"><div class="bline-vis-v" style="background:#0A84FF"></div><div class="bhandle" style="background:#0A84FF;color:#fff">↔</div></div>
+    <div class="bline bline-v" id="bl-iright"><div class="bline-vis-v" style="background:#0A84FF"></div><div class="bhandle" style="background:#0A84FF;color:#fff">↔</div></div>
+    <!-- Shade -->
     <div class="bshade" id="sh-top"></div>
     <div class="bshade" id="sh-bottom"></div>
     <div class="bshade" id="sh-left"></div>
     <div class="bshade" id="sh-right"></div>
   </div>
 
+  <!-- Live ratio display -->
+  <div class="ratio-display">
+    <div class="ratio-item">
+      <div class="ratio-label">Left | Right</div>
+      <div class="ratio-value" id="lrRatio" style="color:var(--green)">50|50</div>
+    </div>
+    <div style="width:1px;height:40px;background:var(--border)"></div>
+    <div class="ratio-item">
+      <div class="ratio-label">Top | Bottom</div>
+      <div class="ratio-value" id="tbRatio" style="color:var(--green)">50|50</div>
+    </div>
+  </div>
+
   <div class="bstats" id="bstats"></div>
+
   <div class="ig">
     <div class="il">Card Name (optional)</div>
     <input type="text" class="inp" id="cardName" placeholder="e.g. Charizard Base Set 1st Edition">
   </div>
   <div class="err" id="errorMsg"></div>
   <button class="btn-p" onclick="analyze()"><span style="font-size:17px">⚡</span> Analyze Card</button>
-  <button class="btn-g" onclick="goHome()">← Choose Different Photo</button>
+  <button class="btn-g" onclick="show('screen-straighten')">← Re-straighten Photo</button>
 </div>
 
 <!-- LOADING -->
@@ -230,10 +302,10 @@ input[type=file]{display:none}
     <div class="pokeball"></div>
     <div><div class="lt">Grading your card...</div></div>
     <div class="lsteps">
-      <div class="ls" id="s1"><div class="sd"></div>Cropping to card area</div>
-      <div class="ls" id="s2"><div class="sd"></div>Generating surface scan</div>
-      <div class="ls" id="s3"><div class="sd"></div>Cross-referencing defects</div>
-      <div class="ls" id="s4"><div class="sd"></div>Analysing measurements</div>
+      <div class="ls" id="s1"><div class="sd"></div>Applying straightening</div>
+      <div class="ls" id="s2"><div class="sd"></div>Cropping to card area</div>
+      <div class="ls" id="s3"><div class="sd"></div>Generating surface scan</div>
+      <div class="ls" id="s4"><div class="sd"></div>Cross-referencing defects</div>
       <div class="ls" id="s5"><div class="sd"></div>Computing final grade</div>
     </div>
   </div>
@@ -248,12 +320,9 @@ input[type=file]{display:none}
       <div class="glt" id="glt">—</div>
       <div class="gsl">PSA-Style Grade</div>
     </div>
-    <div class="gsw">
-      <div class="gscore" id="gs">—</div>
-      <div class="gss">/ 10</div>
-    </div>
+    <div class="gsw"><div class="gscore" id="gs">—</div><div class="gss">/ 10</div></div>
   </div>
-  <div class="sec">📐 Border Measurements</div>
+  <div class="sec">📐 Centering Measurements</div>
   <div class="bmc">
     <div class="bdg" id="bdg"></div>
     <div class="cv" id="cverd"></div>
@@ -285,101 +354,167 @@ input[type=file]{display:none}
   <video id="vidFeed" autoplay playsinline muted></video>
   <canvas id="snapCanvas"></canvas>
   <div class="cam-flash" id="camFlash"></div>
-  <div class="cam-ui">
-    <div class="cam-guide-wrap" id="camGuide">
-      <div class="cam-card-border" id="camBorder">
-        <div class="corner tl"></div><div class="corner tr"></div>
-        <div class="corner bl"></div><div class="corner br"></div>
-      </div>
-      <svg class="cam-svg" viewBox="0 0 100 140" preserveAspectRatio="none">
-        <rect class="cam-progress" id="camProg" x="2" y="2" width="96" height="136" rx="7"/>
-      </svg>
-      <div class="cam-badge" id="camBadge">ALIGN CARD</div>
-      <div class="cam-checks" id="camChecks">
-        <div class="chk" id="chk-center"><div class="chk-dot"></div>CENTER</div>
-        <div class="chk" id="chk-light"><div class="chk-dot"></div>LIGHT</div>
-        <div class="chk" id="chk-level"><div class="chk-dot"></div>LEVEL</div>
-      </div>
+
+  <!-- Spirit level H -->
+  <div class="level-h" id="levelH">
+    <div class="level-h-track"></div>
+    <div class="level-h-bubble" id="lvlHbubble" style="left:50%"></div>
+  </div>
+
+  <!-- Spirit level V -->
+  <div class="level-v" id="levelV">
+    <div class="level-v-track"></div>
+    <div class="level-v-bubble" id="lvlVbubble" style="top:50%"></div>
+  </div>
+
+  <!-- Grid -->
+  <svg class="cam-grid" id="camGrid" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5">
+    <line x1="33%" y1="0" x2="33%" y2="100%"/>
+    <line x1="66%" y1="0" x2="66%" y2="100%"/>
+    <line x1="0" y1="33%" x2="100%" y2="33%"/>
+    <line x1="0" y1="66%" x2="100%" y2="66%"/>
+  </svg>
+
+  <!-- Card guide -->
+  <div class="cam-guide-wrap" id="camGuide">
+    <div class="cam-card-border" id="camBorder">
+      <div class="corner tl"></div><div class="corner tr"></div>
+      <div class="corner bl"></div><div class="corner br"></div>
     </div>
+    <svg class="cam-svg" viewBox="0 0 100 140" preserveAspectRatio="none">
+      <rect class="cam-progress" id="camProg" x="2" y="2" width="96" height="136" rx="7"/>
+    </svg>
+  </div>
+
+  <div class="cam-badge" id="camBadge">ALIGN CARD IN FRAME</div>
+  <div class="cam-checks" id="camChecks">
+    <div class="chk" id="chk-center"><div class="chk-dot"></div>CENTER</div>
+    <div class="chk" id="chk-light"><div class="chk-dot"></div>LIGHT</div>
+    <div class="chk" id="chk-level"><div class="chk-dot"></div>LEVEL</div>
   </div>
   <button class="cam-cancel" onclick="closeCamera()">Cancel</button>
 </div>
 
 <script>
 const WORKER='https://pokegrader-api.jaydengoosen1.workers.dev';
-let imgB64=null,imgSrc=null,mediaType='image/jpeg';
+let imgB64=null,imgSrc=null,straightenedSrc=null,mediaType='image/jpeg';
 let camStream=null,alignTimer=null,stepTimer=null,holdFrames=0;
-
-// Border positions as percentages (0-1) of image display size
-let bTop=0.10, bBottom=0.90, bLeft=0.08, bRight=0.92;
+let rotAngle=0;
+// 8 border lines as fractions: outer top/bottom/left/right, inner top/bottom/left/right
+let oTop=0.04,oBottom=0.96,oLeft=0.04,oRight=0.96;
+let iTop=0.14,iBottom=0.86,iLeft=0.10,iRight=0.90;
+let activeLine=null;
 
 // NAV
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');window.scrollTo(0,0);}
-function goHome(){imgB64=null;imgSrc=null;document.getElementById('cardName').value='';document.getElementById('errorMsg').style.display='none';document.getElementById('fi').value='';closeCamera();show('upload');}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function goHome(){imgB64=null;imgSrc=null;straightenedSrc=null;document.getElementById('cardName').value='';document.getElementById('errorMsg').style.display='none';document.getElementById('fi').value='';rotAngle=0;if(document.getElementById('strSlider'))document.getElementById('strSlider').value=0;closeCamera();show('screen-upload');}
 
 // FILE
 function handleFile(file){
   if(!file||!file.type.startsWith('image/'))return;
   mediaType=file.type;
   const r=new FileReader();
-  r.onload=e=>{imgB64=e.target.result.split(',')[1];imgSrc=e.target.result;loadBorderTool();};
+  r.onload=e=>{imgB64=e.target.result.split(',')[1];imgSrc=e.target.result;loadStraighten();};
   r.readAsDataURL(file);
 }
 
-function loadBorderTool(){
-  const img=document.getElementById('bimg');
+// STRAIGHTEN
+function loadStraighten(){
+  rotAngle=0;
+  document.getElementById('strSlider').value=0;
+  document.getElementById('strAngleLabel').textContent='0.0°';
+  document.getElementById('straightenImg').src=imgSrc;
+  document.getElementById('straightenImg').style.transform='rotate(0deg)';
+  drawStrGrid();
+  show('screen-straighten');
+}
+
+function drawStrGrid(){
+  const svg=document.getElementById('strGrid');
+  svg.innerHTML=`
+    <line x1="33%" y1="0" x2="33%" y2="100%" stroke="rgba(255,208,0,0.2)" stroke-width="1"/>
+    <line x1="66%" y1="0" x2="66%" y2="100%" stroke="rgba(255,208,0,0.2)" stroke-width="1"/>
+    <line x1="0" y1="33%" x2="100%" y2="33%" stroke="rgba(255,208,0,0.2)" stroke-width="1"/>
+    <line x1="0" y1="66%" x2="100%" y2="66%" stroke="rgba(255,208,0,0.2)" stroke-width="1"/>
+    <line x1="50%" y1="0" x2="50%" y2="100%" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="4,4"/>
+    <line x1="0" y1="50%" x2="100%" y2="50%" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="4,4"/>
+  `;
+}
+
+function updateRotation(val){
+  rotAngle=parseFloat(val);
+  document.getElementById('strAngleLabel').textContent=rotAngle.toFixed(1)+'°';
+  document.getElementById('straightenImg').style.transform=`rotate(${rotAngle}deg)`;
+}
+
+function resetRotation(){
+  rotAngle=0;
+  document.getElementById('strSlider').value=0;
+  document.getElementById('strAngleLabel').textContent='0.0°';
+  document.getElementById('straightenImg').style.transform='rotate(0deg)';
+}
+
+function confirmStraighten(){
+  // Bake rotation into a new canvas image
+  const img=new Image();
   img.onload=()=>{
-    // Reset borders to default
-    bTop=0.10;bBottom=0.90;bLeft=0.08;bRight=0.92;
-    updateLines();
-    updateStats();
-    show('border');
-    // Setup drag after display
-    setTimeout(setupDrag,100);
+    const rad=rotAngle*Math.PI/180;
+    const cos=Math.abs(Math.cos(rad)),sin=Math.abs(Math.sin(rad));
+    const nW=Math.round(img.width*cos+img.height*sin);
+    const nH=Math.round(img.height*cos+img.width*sin);
+    const c=document.createElement('canvas');
+    c.width=nW;c.height=nH;
+    const ctx=c.getContext('2d');
+    ctx.translate(nW/2,nH/2);
+    ctx.rotate(rad);
+    ctx.drawImage(img,-img.width/2,-img.height/2);
+    straightenedSrc=c.toDataURL('image/jpeg',.93);
+    imgB64=straightenedSrc.split(',')[1];
+    loadBorderTool();
   };
   img.src=imgSrc;
 }
 
-// UPDATE LINE POSITIONS
-function updateLines(){
-  const wrap=document.getElementById('bwrap');
-  const H=wrap.offsetHeight||wrap.clientHeight;
-  const W=wrap.offsetWidth||wrap.clientWidth;
-  if(!H||!W)return;
-
-  // Top line
-  const top=document.getElementById('bl-top');
-  top.style.top=(bTop*100)+'%';
-  top.style.left='0'; top.style.right='0';
-
-  // Bottom line
-  const bot=document.getElementById('bl-bottom');
-  bot.style.top=(bBottom*100)+'%';
-  bot.style.left='0'; bot.style.right='0';
-
-  // Left line
-  const lft=document.getElementById('bl-left');
-  lft.style.left=(bLeft*100)+'%';
-  lft.style.top='0'; lft.style.bottom='0';
-
-  // Right line
-  const rgt=document.getElementById('bl-right');
-  rgt.style.left=(bRight*100)+'%';
-  rgt.style.top='0'; rgt.style.bottom='0';
-
-  // Shade overlays
-  document.getElementById('sh-top').style.cssText=`top:0;left:0;right:0;height:${bTop*100}%`;
-  document.getElementById('sh-bottom').style.cssText=`bottom:0;left:0;right:0;height:${(1-bBottom)*100}%`;
-  document.getElementById('sh-left').style.cssText=`top:${bTop*100}%;bottom:${(1-bBottom)*100}%;left:0;width:${bLeft*100}%`;
-  document.getElementById('sh-right').style.cssText=`top:${bTop*100}%;bottom:${(1-bBottom)*100}%;right:0;width:${(1-bRight)*100}%`;
+// BORDER TOOL
+function loadBorderTool(){
+  oTop=0.04;oBottom=0.96;oLeft=0.04;oRight=0.96;
+  iTop=0.14;iBottom=0.86;iLeft=0.10;iRight=0.90;
+  const img=document.getElementById('bimg');
+  img.onload=()=>{updateAllLines();updateStats();show('screen-border');setTimeout(setupDrag,150);};
+  img.src=straightenedSrc||imgSrc;
 }
 
-// DRAG SETUP
+function updateAllLines(){
+  const wrap=document.getElementById('bwrap');
+  const H=wrap.offsetHeight||wrap.clientHeight||400;
+  const W=wrap.offsetWidth||wrap.clientWidth||300;
+
+  setLine('bl-otop',   {top:(oTop*100)+'%',   left:'0',right:'0'});
+  setLine('bl-obottom',{top:(oBottom*100)+'%', left:'0',right:'0'});
+  setLine('bl-oleft',  {left:(oLeft*100)+'%',  top:'0', bottom:'0'});
+  setLine('bl-oright', {left:(oRight*100)+'%', top:'0', bottom:'0'});
+  setLine('bl-itop',   {top:(iTop*100)+'%',    left:'0',right:'0'});
+  setLine('bl-ibottom',{top:(iBottom*100)+'%', left:'0',right:'0'});
+  setLine('bl-ileft',  {left:(iLeft*100)+'%',  top:'0', bottom:'0'});
+  setLine('bl-iright', {left:(iRight*100)+'%', top:'0', bottom:'0'});
+
+  // Shade outside outer edges
+  document.getElementById('sh-top').style.cssText=`top:0;left:0;right:0;height:${oTop*100}%;z-index:5;pointer-events:none;position:absolute;background:rgba(0,0,0,.5)`;
+  document.getElementById('sh-bottom').style.cssText=`bottom:0;left:0;right:0;height:${(1-oBottom)*100}%;z-index:5;pointer-events:none;position:absolute;background:rgba(0,0,0,.5)`;
+  document.getElementById('sh-left').style.cssText=`top:${oTop*100}%;bottom:${(1-oBottom)*100}%;left:0;width:${oLeft*100}%;z-index:5;pointer-events:none;position:absolute;background:rgba(0,0,0,.5)`;
+  document.getElementById('sh-right').style.cssText=`top:${oTop*100}%;bottom:${(1-oBottom)*100}%;right:0;width:${(1-oRight)*100}%;z-index:5;pointer-events:none;position:absolute;background:rgba(0,0,0,.5)`;
+}
+
+function setLine(id,styles){
+  const el=document.getElementById(id);
+  Object.assign(el.style,styles);
+}
+
 function setupDrag(){
   const wrap=document.getElementById('bwrap');
   let active=null;
 
-  function getRelPos(e){
+  function getPos(e){
     const r=wrap.getBoundingClientRect();
     const touch=e.touches?e.touches[0]:e;
     return{
@@ -388,37 +523,53 @@ function setupDrag(){
     };
   }
 
-  function startDrag(lineId){
-    return function(e){
-      e.preventDefault();e.stopPropagation();
-      active=lineId;
-    };
+  // Which line is closest to touch?
+  function nearest(p){
+    const candidates=[
+      {id:'otop',   dist:Math.abs(p.y-oTop),    type:'h'},
+      {id:'obottom',dist:Math.abs(p.y-oBottom),  type:'h'},
+      {id:'oleft',  dist:Math.abs(p.x-oLeft),    type:'v'},
+      {id:'oright', dist:Math.abs(p.x-oRight),   type:'v'},
+      {id:'itop',   dist:Math.abs(p.y-iTop),     type:'h'},
+      {id:'ibottom',dist:Math.abs(p.y-iBottom),  type:'h'},
+      {id:'ileft',  dist:Math.abs(p.x-iLeft),    type:'v'},
+      {id:'iright', dist:Math.abs(p.x-iRight),   type:'v'},
+    ];
+    candidates.sort((a,b)=>a.dist-b.dist);
+    return candidates[0].dist<0.08?candidates[0]:null;
+  }
+
+  function onStart(e){
+    e.preventDefault();
+    const p=getPos(e);
+    const n=nearest(p);
+    if(n)active=n;
   }
 
   function onMove(e){
     if(!active)return;
     e.preventDefault();
-    const p=getRelPos(e);
-    if(active==='top')    bTop=Math.max(0.01,Math.min(bBottom-0.05,p.y));
-    if(active==='bottom') bBottom=Math.max(bTop+0.05,Math.min(0.99,p.y));
-    if(active==='left')   bLeft=Math.max(0.01,Math.min(bRight-0.05,p.x));
-    if(active==='right')  bRight=Math.max(bLeft+0.05,Math.min(0.99,p.x));
-    updateLines();updateStats();
+    const p=getPos(e);
+    switch(active.id){
+      case'otop':    oTop=Math.max(0.01,Math.min(iTop-0.02,p.y));break;
+      case'obottom': oBottom=Math.max(iBottom+0.02,Math.min(0.99,p.y));break;
+      case'oleft':   oLeft=Math.max(0.01,Math.min(iLeft-0.02,p.x));break;
+      case'oright':  oRight=Math.max(iRight+0.02,Math.min(0.99,p.x));break;
+      case'itop':    iTop=Math.max(oTop+0.02,Math.min(iBottom-0.05,p.y));break;
+      case'ibottom': iBottom=Math.max(iTop+0.05,Math.min(oBottom-0.02,p.y));break;
+      case'ileft':   iLeft=Math.max(oLeft+0.02,Math.min(iRight-0.05,p.x));break;
+      case'iright':  iRight=Math.max(iLeft+0.05,Math.min(oRight-0.02,p.x));break;
+    }
+    updateAllLines();updateStats();
   }
 
   function onEnd(){active=null;}
 
-  // Attach to each line
-  ['top','bottom','left','right'].forEach(id=>{
-    const el=document.getElementById('bl-'+id);
-    el.addEventListener('touchstart',startDrag(id),{passive:false});
-    el.addEventListener('mousedown',startDrag(id));
-  });
-
-  // Move/end on wrap and document
+  wrap.addEventListener('touchstart',onStart,{passive:false});
   wrap.addEventListener('touchmove',onMove,{passive:false});
-  wrap.addEventListener('mousemove',onMove);
   document.addEventListener('touchend',onEnd);
+  wrap.addEventListener('mousedown',onStart);
+  wrap.addEventListener('mousemove',onMove);
   document.addEventListener('mouseup',onEnd);
 }
 
@@ -428,40 +579,55 @@ function updateStats(){
   const img=document.getElementById('bimg');
   const W=img.naturalWidth||img.offsetWidth||100;
   const H=img.naturalHeight||img.offsetHeight||100;
-  const topPx=Math.round(bTop*H);
-  const botPx=Math.round((1-bBottom)*H);
-  const lftPx=Math.round(bLeft*W);
-  const rgtPx=Math.round((1-bRight)*W);
-  const tbT=topPx+botPx,lrT=lftPx+rgtPx;
+
+  // Border widths = inner - outer on each side
+  const topPx=Math.round((iTop-oTop)*H);
+  const botPx=Math.round((oBottom-iBottom)*H);
+  const lftPx=Math.round((iLeft-oLeft)*W);
+  const rgtPx=Math.round((oRight-iRight)*W);
+
+  const tbT=Math.max(1,topPx+botPx),lrT=Math.max(1,lftPx+rgtPx);
   const tc=ratioCol(topPx,botPx),lc=ratioCol(lftPx,rgtPx);
+  const tbPct=Math.round(topPx/tbT*100),lrPct=Math.round(lftPx/lrT*100);
+
+  document.getElementById('lrRatio').textContent=`${lrPct}|${100-lrPct}`;
+  document.getElementById('lrRatio').style.color=lc;
+  document.getElementById('tbRatio').textContent=`${tbPct}|${100-tbPct}`;
+  document.getElementById('tbRatio').style.color=tc;
+
   document.getElementById('bstats').innerHTML=`
-    <div class="bst"><div class="bst-l">Top Border</div><div class="bst-v" style="color:${tc}">${topPx}px</div><div class="bst-s">${Math.round(topPx/tbT*100)}% vertical</div></div>
-    <div class="bst"><div class="bst-l">Bottom Border</div><div class="bst-v" style="color:${tc}">${botPx}px</div><div class="bst-s">${Math.round(botPx/tbT*100)}% vertical</div></div>
-    <div class="bst"><div class="bst-l">Left Border</div><div class="bst-v" style="color:${lc}">${lftPx}px</div><div class="bst-s">${Math.round(lftPx/lrT*100)}% horizontal</div></div>
-    <div class="bst"><div class="bst-l">Right Border</div><div class="bst-v" style="color:${lc}">${rgtPx}px</div><div class="bst-s">${Math.round(rgtPx/lrT*100)}% horizontal</div></div>`;
+    <div class="bst"><div class="bst-l">Top Border</div><div class="bst-v" style="color:${tc}">${topPx}px</div><div class="bst-s">${tbPct}% of vertical</div></div>
+    <div class="bst"><div class="bst-l">Bottom Border</div><div class="bst-v" style="color:${tc}">${botPx}px</div><div class="bst-s">${100-tbPct}% of vertical</div></div>
+    <div class="bst"><div class="bst-l">Left Border</div><div class="bst-v" style="color:${lc}">${lftPx}px</div><div class="bst-s">${lrPct}% of horizontal</div></div>
+    <div class="bst"><div class="bst-l">Right Border</div><div class="bst-v" style="color:${lc}">${rgtPx}px</div><div class="bst-s">${100-lrPct}% of horizontal</div></div>`;
 }
 
 function getMeasured(){
   const img=document.getElementById('bimg');
   const W=img.naturalWidth||img.offsetWidth;
   const H=img.naturalHeight||img.offsetHeight;
-  return{top:Math.round(bTop*H),bottom:Math.round((1-bBottom)*H),left:Math.round(bLeft*W),right:Math.round((1-bRight)*W),imgW:W,imgH:H};
+  return{
+    top:Math.round((iTop-oTop)*H),
+    bottom:Math.round((oBottom-iBottom)*H),
+    left:Math.round((iLeft-oLeft)*W),
+    right:Math.round((oRight-iRight)*W),
+    cropX:Math.round(oLeft*W),cropY:Math.round(oTop*H),
+    cropW:Math.round((oRight-oLeft)*W),cropH:Math.round((oBottom-oTop)*H)
+  };
 }
 
-// CROP
+// CROP TO CARD
 function getCropped(){
   return new Promise(res=>{
     const img=new Image();
     img.onload=()=>{
-      const W=img.naturalWidth,H=img.naturalHeight;
-      const x=Math.round(bLeft*W),y=Math.round(bTop*H);
-      const w=Math.round((bRight-bLeft)*W),h=Math.round((bBottom-bTop)*H);
+      const mb=getMeasured();
       const c=document.createElement('canvas');
-      c.width=w;c.height=h;
-      c.getContext('2d').drawImage(img,x,y,w,h,0,0,w,h);
+      c.width=mb.cropW;c.height=mb.cropH;
+      c.getContext('2d').drawImage(img,mb.cropX,mb.cropY,mb.cropW,mb.cropH,0,0,mb.cropW,mb.cropH);
       res(c.toDataURL('image/jpeg',.92).split(',')[1]);
     };
-    img.src=imgSrc;
+    img.src=straightenedSrc||imgSrc;
   });
 }
 
@@ -470,16 +636,12 @@ function getEmboss(b64){
   return new Promise(res=>{
     const img=new Image();
     img.onload=()=>{
-      const c=document.createElement('canvas');
-      c.width=img.naturalWidth;c.height=img.naturalHeight;
-      const ctx=c.getContext('2d');
-      ctx.drawImage(img,0,0);
-      const id=ctx.getImageData(0,0,c.width,c.height);
-      const d=id.data;
+      const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;
+      const ctx=c.getContext('2d');ctx.drawImage(img,0,0);
+      const id=ctx.getImageData(0,0,c.width,c.height);const d=id.data;
       for(let i=0;i<d.length;i+=4){const g=d[i]*.299+d[i+1]*.587+d[i+2]*.114;d[i]=d[i+1]=d[i+2]=g;}
       ctx.putImageData(id,0,0);
-      const s=ctx.getImageData(0,0,c.width,c.height);
-      const dst=ctx.createImageData(c.width,c.height);
+      const s=ctx.getImageData(0,0,c.width,c.height);const dst=ctx.createImageData(c.width,c.height);
       const sw=s.data,dw=dst.data,W=c.width;
       for(let y=1;y<c.height-1;y++)for(let x=1;x<W-1;x++){
         const i=(y*W+x)*4,tl=((y-1)*W+(x-1))*4,br=((y+1)*W+(x+1))*4;
@@ -500,8 +662,7 @@ function startSteps(){
   let i=0;
   stepTimer=setInterval(()=>{
     document.getElementById(['s1','s2','s3','s4','s5'][i]).classList.replace('active','done');
-    i++;
-    if(i<5)document.getElementById(['s1','s2','s3','s4','s5'][i]).classList.add('active');
+    i++;if(i<5)document.getElementById(['s1','s2','s3','s4','s5'][i]).classList.add('active');
     else clearInterval(stepTimer);
   },1300);
 }
@@ -515,55 +676,43 @@ function dCol(t){if(t==='scratch'||t==='wear')return'#FF3B30';if(t==='print')ret
 async function analyze(){
   if(!imgB64)return;
   document.getElementById('errorMsg').style.display='none';
-  show('loading');startSteps();
+  show('screen-loading');startSteps();
   const mb=getMeasured();
   const cardName=document.getElementById('cardName').value.trim();
-  const tbT=mb.top+mb.bottom,lrT=mb.left+mb.right;
+  const tbT=Math.max(1,mb.top+mb.bottom),lrT=Math.max(1,mb.left+mb.right);
   const [cropped,emboss]=await Promise.all([getCropped(),getEmboss(imgB64)]);
 
-  const system=`You are a professional Pokémon TCG grading expert matching PSA/BGS/CGC standards.
+  const system=`You are a professional Pokémon TCG grading expert. You receive TWO images: 1) original card photo cropped to outer card edge, 2) embossed surface scan.
 
-You receive TWO images: 1) original card photo cropped to card area, 2) embossed surface scan of same card.
+RULES: Only flag defects VISIBLE IN BOTH images. Do not penalise background.
 
-CRITICAL RULES:
-- Only flag defects VISIBLE IN BOTH images. Single-image artifacts = background noise, ignore them.
-- Do NOT penalise anything outside the card border.
-- Use the EXACT measured borders below — do not re-estimate centering.
+EXACT MEASURED BORDERS (user-confirmed via dual border line tool):
+Top: ${mb.top}px (${Math.round(mb.top/tbT*100)}%) | Bottom: ${mb.bottom}px (${Math.round(mb.bottom/tbT*100)}%)
+Left: ${mb.left}px (${Math.round(mb.left/lrT*100)}%) | Right: ${mb.right}px (${Math.round(mb.right/lrT*100)}%)
+T/B ratio: ${Math.round(mb.top/tbT*100)}/${Math.round(mb.bottom/tbT*100)} | L/R ratio: ${Math.round(mb.left/lrT*100)}/${Math.round(mb.right/lrT*100)}
 
-EXACT MEASURED BORDERS:
-- Top: ${mb.top}px (${Math.round(mb.top/tbT*100)}%)
-- Bottom: ${mb.bottom}px (${Math.round(mb.bottom/tbT*100)}%)
-- Left: ${mb.left}px (${Math.round(mb.left/lrT*100)}%)
-- Right: ${mb.right}px (${Math.round(mb.right/lrT*100)}%)
-- Top/Bottom ratio: ${Math.round(mb.top/tbT*100)}/${Math.round(mb.bottom/tbT*100)}
-- Left/Right ratio: ${Math.round(mb.left/lrT*100)}/${Math.round(mb.right/lrT*100)}
-
-Return ONLY valid JSON, no markdown:
-{"defects":[{"type":"<scratch|wear|print|crease|corner>","x_pct":<0-100>,"y_pct":<0-100>,"description":"<short>","severity":"<minor|moderate|major>"}],"centering":{"score":<1-10>,"descriptor":"<phrase>","notes":"<2-3 sentences>"},"corners":{"score":<1-10>,"descriptor":"<phrase>","notes":"<2-3 sentences>"},"surface":{"score":<1-10>,"descriptor":"<phrase>","notes":"<2-3 sentences>"},"edges":{"score":<1-10>,"descriptor":"<phrase>","notes":"<2-3 sentences>"},"overall":{"score":<1-10>,"label":"<grade>","summary":"<3-4 sentences>"}}
-
-Only include confirmed dual-scan defects. Centering: 10=50/50, 9=55/45, 8=60/40, 7=65/35.`;
+Return ONLY valid JSON:
+{"defects":[{"type":"<scratch|wear|print|crease|corner>","x_pct":<0-100>,"y_pct":<0-100>,"description":"<short>","severity":"<minor|moderate|major>"}],"centering":{"score":<1-10>,"descriptor":"<phrase>","notes":"<2-3 sentences>"},"corners":{"score":<1-10>,"descriptor":"<phrase>","notes":"<2-3 sentences>"},"surface":{"score":<1-10>,"descriptor":"<phrase>","notes":"<2-3 sentences>"},"edges":{"score":<1-10>,"descriptor":"<phrase>","notes":"<2-3 sentences>"},"overall":{"score":<1-10>,"label":"<grade>","summary":"<3-4 sentences>"}}`;
 
   try{
     const res=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1500,system,messages:[{role:'user',content:[
       {type:'image',source:{type:'base64',media_type:'image/jpeg',data:cropped}},
       {type:'image',source:{type:'base64',media_type:'image/jpeg',data:emboss}},
-      {type:'text',text:`Grade this card${cardName?' ("'+cardName+'")':''}. Image 1=original, Image 2=surface scan. Flag only defects in BOTH. Return ONLY JSON.`}
+      {type:'text',text:`Grade this card${cardName?' ("'+cardName+'")':''}. Image 1=original, Image 2=surface scan. Only flag defects in BOTH. Return ONLY JSON.`}
     ]}]})});
     clearInterval(stepTimer);
     const data=await res.json();
     if(data.error)throw new Error(data.error.message);
     const raw=(data.content||[]).map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
     renderResults(JSON.parse(raw),cardName,mb,emboss,cropped);
-    show('results');
+    show('screen-results');
   }catch(err){
-    clearInterval(stepTimer);show('border');
-    const eb=document.getElementById('errorMsg');
-    eb.style.display='block';
+    clearInterval(stepTimer);show('screen-border');
+    const eb=document.getElementById('errorMsg');eb.style.display='block';
     eb.textContent='⚠ '+(err.message||'Something went wrong. Try again.');
   }
 }
 
-// RENDER
 function renderResults(r,cardName,mb,embossB64,origB64){
   const ov=r.overall.score,col=sCol(ov);
   document.getElementById('gcn').textContent=(cardName||'Pokémon Card').toUpperCase();
@@ -572,12 +721,12 @@ function renderResults(r,cardName,mb,embossB64,origB64){
   document.getElementById('gs').style.color=col;
   document.getElementById('gradeHero').style.borderLeftColor=col;
 
-  const tbT=mb.top+mb.bottom,lrT=mb.left+mb.right;
+  const tbT=Math.max(1,mb.top+mb.bottom),lrT=Math.max(1,mb.left+mb.right);
   const tc=ratioCol(mb.top,mb.bottom),lc=ratioCol(mb.left,mb.right);
   document.getElementById('bdg').innerHTML=`
     <div class="brp"><div class="brpl">Top / Bottom</div><div class="brpv" style="color:${tc}">${Math.round(mb.top/tbT*100)}/${Math.round(mb.bottom/tbT*100)}</div><div class="brps">${mb.top}px — ${mb.bottom}px</div></div>
     <div class="brp"><div class="brpl">Left / Right</div><div class="brpv" style="color:${lc}">${Math.round(mb.left/lrT*100)}/${Math.round(mb.right/lrT*100)}</div><div class="brps">${mb.left}px — ${mb.right}px</div></div>`;
-  const worst=Math.max(Math.max(mb.top,mb.bottom)/Math.min(mb.top,mb.bottom),Math.max(mb.left,mb.right)/Math.min(mb.left,mb.right));
+  const worst=Math.max(Math.max(mb.top,mb.bottom)/Math.max(1,Math.min(mb.top,mb.bottom)),Math.max(mb.left,mb.right)/Math.max(1,Math.min(mb.left,mb.right)));
   let vc,vt;
   if(worst<=1.1){vc='#34C759';vt='Excellent centering — near perfect 50/50';}
   else if(worst<=1.25){vc='#FFD000';vt='Slight variance — minor offset detected';}
@@ -615,24 +764,57 @@ function renderDefects(defects,embossB64,origB64){
     });
   };
   di.src='data:image/jpeg;base64,'+origB64;
-  const dl=document.getElementById('deflist');
-  dl.innerHTML=defects.length?defects.map(d=>{const col=dCol(d.type);return`<div class="dfi"><div class="dfid" style="background:${col}"></div><div><div style="font-family:var(--fd);font-size:12px;color:${col};text-transform:uppercase;letter-spacing:.5px">${d.type} — ${d.severity}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${d.description}</div></div></div>`;}).join(''):`<div class="dfi"><div class="dfid" style="background:#34C759"></div><span style="color:#34C759">No defects confirmed in both scans</span></div>`;
+  document.getElementById('deflist').innerHTML=defects.length?defects.map(d=>{const col=dCol(d.type);return`<div class="dfi"><div class="dfid" style="background:${col}"></div><div><div style="font-family:var(--fd);font-size:12px;color:${col};text-transform:uppercase;letter-spacing:.5px">${d.type} — ${d.severity}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${d.description}</div></div></div>`;}).join(''):`<div class="dfi"><div class="dfid" style="background:#34C759"></div><span style="color:#34C759">No defects confirmed in both scans</span></div>`;
 }
 
-// CAMERA
+// CAMERA + LEVELS
 async function openCamera(){
   document.getElementById('camOverlay').classList.add('open');holdFrames=0;
   try{
     camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1920},height:{ideal:1080}}});
     document.getElementById('vidFeed').srcObject=camStream;
+    startDeviceOrientation();
     startChecks();
   }catch(e){document.getElementById('camOverlay').classList.remove('open');alert('Camera denied. Use Upload from Library.');}
 }
+
 function closeCamera(){
   if(camStream)camStream.getTracks().forEach(t=>t.stop());camStream=null;
   if(alignTimer)clearInterval(alignTimer);
+  window.removeEventListener('deviceorientation',handleOrientation);
   document.getElementById('camOverlay').classList.remove('open');holdFrames=0;
 }
+
+let tiltX=0,tiltY=0;
+function startDeviceOrientation(){
+  if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
+    DeviceOrientationEvent.requestPermission().then(p=>{if(p==='granted')window.addEventListener('deviceorientation',handleOrientation);});
+  }else{
+    window.addEventListener('deviceorientation',handleOrientation);
+  }
+}
+
+function handleOrientation(e){
+  // gamma = left/right tilt, beta = front/back tilt
+  tiltX=e.gamma||0; // -90 to 90
+  tiltY=e.beta||0;  // -180 to 180
+
+  // H bubble: map gamma to 10%-90% of bar
+  const hPct=Math.max(10,Math.min(90,50+tiltX*2));
+  document.getElementById('lvlHbubble').style.left=hPct+'%';
+  const hOk=Math.abs(tiltX)<3;
+  document.getElementById('lvlHbubble').style.background=hOk?'var(--green)':'var(--red)';
+  document.getElementById('lvlHbubble').style.boxShadow=`0 0 6px ${hOk?'var(--green)':'var(--red)'}`;
+
+  // V bubble: map beta (around 90deg = flat) to position
+  const vOffset=tiltY-90; // 0 when flat
+  const vPct=Math.max(10,Math.min(90,50+vOffset*2));
+  document.getElementById('lvlVbubble').style.top=vPct+'%';
+  const vOk=Math.abs(vOffset)<3;
+  document.getElementById('lvlVbubble').style.background=vOk?'var(--green)':'var(--red)';
+  document.getElementById('lvlVbubble').style.boxShadow=`0 0 6px ${vOk?'var(--green)':'var(--red)'}`;
+}
+
 function startChecks(){
   const video=document.getElementById('vidFeed');
   const prog=document.getElementById('camProg');
@@ -643,37 +825,46 @@ function startChecks(){
     const tmp=document.createElement('canvas');tmp.width=80;tmp.height=112;
     const ctx=tmp.getContext('2d');ctx.drawImage(video,0,0,80,112);
     const px=ctx.getImageData(0,0,80,112).data;
+
     let cb=0;
     for(let y=28;y<84;y++)for(let x=16;x<64;x++){const i=(y*80+x)*4,b=(px[i]+px[i+1]+px[i+2])/3;if(b>80&&b<245)cb++;}
     const centerOk=cb/(56*48)>0.6;
+
     let sum=0,cnt=0;
     for(let y=20;y<92;y++)for(let x=12;x<68;x++){const i=(y*80+x)*4;sum+=(px[i]+px[i+1]+px[i+2])/3;cnt++;}
     const avg=sum/cnt;const lightOk=avg>55&&avg<210;
-    let ls=0,rs=0,half=0;
-    for(let y=20;y<92;y++)for(let x=12;x<40;x++){const i=(y*80+x)*4;ls+=(px[i]+px[i+1]+px[i+2])/3;half++;}
-    for(let y=20;y<92;y++)for(let x=40;x<68;x++){const i=(y*80+x)*4;rs+=(px[i]+px[i+1]+px[i+2])/3;}
-    const levelOk=Math.abs(ls-rs)/half<30;
+
+    const levelOk=Math.abs(tiltX)<4&&Math.abs(tiltY-90)<4;
+
     setChk('chk-center',centerOk);setChk('chk-light',lightOk);setChk('chk-level',levelOk);
+
     const score=(centerOk?33:0)+(lightOk?33:0)+(levelOk?34:0);
     const perim=2*(96+136);
     prog.style.strokeDasharray=perim;prog.style.strokeDashoffset=perim*(1-score/100);
     const col=score===100?'#34C759':score>50?'#FFD000':'#FF3B30';
     prog.style.stroke=col;border.style.borderColor=col;
+
     if(score===100){
       holdFrames++;
-      badge.textContent=`HOLD STEADY ${holdFrames}/12`;badge.style.color='#34C759';
+      badge.textContent=`HOLD STEADY — ${holdFrames}/12`;badge.style.color='#34C759';
       if(holdFrames>=12){clearInterval(alignTimer);doCapture();}
-    }else{holdFrames=0;badge.textContent=score>50?'ALMOST THERE':'ALIGN CARD';badge.style.color=score>50?'#FFD000':'rgba(255,255,255,.4)';}
+    }else{
+      holdFrames=0;
+      badge.textContent=score>50?'ALMOST THERE — keep going':'ALIGN CARD IN FRAME';
+      badge.style.color=score>50?'#FFD000':'rgba(255,255,255,.4)';
+    }
   },120);
 }
+
 function setChk(id,pass){const el=document.getElementById(id);el.classList.toggle('pass',pass);el.classList.toggle('fail',!pass);}
+
 function doCapture(){
   const f=document.getElementById('camFlash');f.classList.add('on');setTimeout(()=>f.classList.remove('on'),120);
   const v=document.getElementById('vidFeed'),c=document.getElementById('snapCanvas');
   c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);
   const url=c.toDataURL('image/jpeg',.93);
   imgB64=url.split(',')[1];imgSrc=url;mediaType='image/jpeg';
-  setTimeout(()=>{closeCamera();loadBorderTool();},180);
+  setTimeout(()=>{closeCamera();loadStraighten();},180);
 }
 </script>
 </body>
